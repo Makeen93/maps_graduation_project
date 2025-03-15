@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "611668129666",
+    "project_id": "shophadi-ec794",
+    "storage_bucket": "shophadi-ec794.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611668129666:android:d00ee23e3952fe18e1419b",
+        "android_client_info": {
+          "package_name": "com.example.adminpanal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611668129666-qeni525ueu0dusettolr2ctsbvr3gdia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnDXdUj5jm8QN0ktu4dIDonG9QO19pXSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611668129666-qeni525ueu0dusettolr2ctsbvr3gdia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611668129666:android:23057cee98e3dbe0e1419b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611668129666-82egi29gukn656vniji76n5qb3n1un2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_application_1",
+            "certificate_hash": "0c1d47d5cbc9516271e24bbbad87bc458f0be302"
+          }
+        },
+        {
+          "client_id": "611668129666-qeni525ueu0dusettolr2ctsbvr3gdia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnDXdUj5jm8QN0ktu4dIDonG9QO19pXSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611668129666-qeni525ueu0dusettolr2ctsbvr3gdia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611668129666:android:7f17192d90a56028e1419b",
+        "android_client_info": {
+          "package_name": "com.example.maps_graduation_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611668129666-qeni525ueu0dusettolr2ctsbvr3gdia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnDXdUj5jm8QN0ktu4dIDonG9QO19pXSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611668129666-qeni525ueu0dusettolr2ctsbvr3gdia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

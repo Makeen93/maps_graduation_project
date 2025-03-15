@@ -1,0 +1,7 @@
+flutter_native_splash:
+  color: "#FFFFFF" # Background color of the splash screen
+  image: assets/images/bag/shopping_cart.png # Path to your splash screen logo
+  android: true
+  ios: true
+  android_gravity: center # Logo position on Android
+  ios_content_mode: center # Logo position on iOS

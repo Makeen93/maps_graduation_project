@@ -1,0 +1,130 @@
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
+import 'package:maps_graduation_project/core/widgets/subtitle_text.dart';
+import 'package:maps_graduation_project/core/widgets/title_text.dart';
+import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
+import 'package:maps_graduation_project/features/cart/DL/data/models/cart_model.dart';
+import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
+import 'package:maps_graduation_project/features/product/PL/widgets/heart_btn.dart';
+
+import 'quantity_btm_sheet.dart';
+
+class CartWidget extends StatelessWidget {
+  CartWidget({super.key});
+  late CartModel cart;
+
+  @override
+  Widget build(BuildContext context) {
+    var cartController = Get.find<CartController>();
+    var productController = Get.find<ProductController>();
+    final getCurrentProdct = productController.findByProdId('');
+    Size size = MediaQuery.of(context).size;
+    return getCurrentProdct == null
+        ? const SizedBox.shrink()
+        : FittedBox(
+            child: IntrinsicWidth(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: FancyShimmerImage(
+                        imageUrl: getCurrentProdct.productImage,
+                        height: size.height * 0.2,
+                        width: size.height * 0.2,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    IntrinsicWidth(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: size.width * 0.6,
+                                child: TitlesTextWidget(
+                                  label: getCurrentProdct.productTitle,
+                                  maxLines: 2,
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      // await cartController
+                                      //     .removeOneItem(
+                                      //          cart.cartId,
+                                      //         productId:
+                                      //             getCurrentProdct.productId,
+                                      //         qty: cartModerProvider.quantity);
+                                      // cartController.removeOneItem(
+                                      //     productId: getCurrentProdct.productId);
+                                    },
+                                    icon: const Icon(
+                                      Icons.clear,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  HeartButtonWidget(
+                                      productId: getCurrentProdct.productId)
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SubtitleTextWidget(
+                                label: "${getCurrentProdct.productPrice}\$",
+                                fontSize: 20,
+                                color: Colors.blue,
+                              ),
+                              const Spacer(),
+                              OutlinedButton.icon(
+                                style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  side: const BorderSide(
+                                    width: 2,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  await showModalBottomSheet(
+                                    backgroundColor: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(16.0),
+                                        topRight: Radius.circular(16.0),
+                                      ),
+                                    ),
+                                    context: context,
+                                    builder: (context) {
+                                      return QuantityBottomSheetWidget(
+                                        cartModel: cart,
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(IconlyLight.arrow_down_2),
+                                label: Text("${'Qty'.tr}: ${cart.quantity} "),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+  }
+}
