@@ -21,27 +21,31 @@ class CartBottomCheckout extends StatelessWidget {
         ),
       ),
       child: SizedBox(
-        height: kBottomNavigationBarHeight + 15,
+        height: kBottomNavigationBarHeight + 30,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FittedBox(
-                        child: TitlesTextWidget(
-                            label:
-                                "${'Total'.tr} (${cartController.cartItems.length} ${'products'.tr}/${cartController.getQty()} ${'Items'.tr})")),
-                    SubtitleTextWidget(
-                      label:
-                          "${cartController.getTotal(productProvider: productController)}\$",
-                      color: Colors.blue,
-                    ),
-                  ],
-                ),
+                child: Obx(() {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Builder(builder: (context) {
+                        return FittedBox(
+                            child: TitlesTextWidget(
+                                label:
+                                    "${'Total'.tr} (${cartController.cartItems.length} ${'products'.tr}/${cartController.getQty()} ${'Items'.tr})"));
+                      }),
+                      SubtitleTextWidget(
+                        label:
+                            "${cartController.getTotal(productProvider: productController)}\$",
+                        color: Colors.blue,
+                      ),
+                    ],
+                  );
+                }),
               ),
               ElevatedButton(
                 onPressed: () async {

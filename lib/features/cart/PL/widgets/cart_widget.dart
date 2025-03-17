@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+
 import 'package:maps_graduation_project/core/widgets/subtitle_text.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
@@ -12,14 +14,18 @@ import 'package:maps_graduation_project/features/product/PL/widgets/heart_btn.da
 import 'quantity_btm_sheet.dart';
 
 class CartWidget extends StatelessWidget {
-  CartWidget({super.key});
-  late CartModel cart;
+  const CartWidget({
+    super.key,
+    required this.cart,
+  });
+  final CartModel? cart;
 
   @override
   Widget build(BuildContext context) {
     var cartController = Get.find<CartController>();
     var productController = Get.find<ProductController>();
-    final getCurrentProdct = productController.findByProdId('');
+    final getCurrentProdct =
+        productController.findByProdId(cart?.productId ?? '');
     Size size = MediaQuery.of(context).size;
     return getCurrentProdct == null
         ? const SizedBox.shrink()
@@ -56,14 +62,12 @@ class CartWidget extends StatelessWidget {
                                 children: [
                                   IconButton(
                                     onPressed: () async {
-                                      // await cartController
-                                      //     .removeOneItem(
-                                      //          cart.cartId,
-                                      //         productId:
-                                      //             getCurrentProdct.productId,
-                                      //         qty: cartModerProvider.quantity);
-                                      // cartController.removeOneItem(
-                                      //     productId: getCurrentProdct.productId);
+                                      await cartController.removeOneItem(
+                                        productId: getCurrentProdct.productId,
+                                      );
+                                      cartController.removeOneItem(
+                                          productId:
+                                              getCurrentProdct.productId);
                                     },
                                     icon: const Icon(
                                       Icons.clear,
@@ -108,13 +112,13 @@ class CartWidget extends StatelessWidget {
                                     context: context,
                                     builder: (context) {
                                       return QuantityBottomSheetWidget(
-                                        cartModel: cart,
+                                        cartModel: cart!,
                                       );
                                     },
                                   );
                                 },
                                 icon: const Icon(IconlyLight.arrow_down_2),
-                                label: Text("${'Qty'.tr}: ${cart.quantity} "),
+                                label: Text("${'Qty'.tr}: ${cart!.quantity} "),
                               ),
                             ],
                           )

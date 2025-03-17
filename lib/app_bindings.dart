@@ -30,13 +30,20 @@ class AppBinding extends Bindings {
     Get.lazyPut(
       () => ProductController(productRepoImpl: Get.find()),
     );
+    Get.lazyPut(() => ViewedProductRepoImp(), fenix: true);
+    Get.lazyPut(
+        () => ViewedProductController(
+            viewedProductRepository: Get.find<ViewedProductRepoImp>()),
+        fenix: true);
     Get.lazyPut(() =>
         RegisterController(authRepository: Get.find<AuthRepositoryImp>()));
-    Get.lazyPut(() => FirebaseAuthService());
-    Get.lazyPut(() => FireStoreService());
-    Get.lazyPut(() => StorageService());
-    Get.lazyPut(() => ProfileRepoImpl(
-        firebaseAuthService: Get.find(), firestore: Get.find()));
+    Get.lazyPut(() => FirebaseAuthService(), fenix: true);
+    Get.lazyPut(() => FireStoreService(), fenix: true);
+    Get.lazyPut(() => StorageService(), fenix: true);
+    Get.lazyPut(
+        () => ProfileRepoImpl(
+            firebaseAuthService: Get.find(), firestore: Get.find()),
+        fenix: true);
     Get.lazyPut(() => ProfileController(profileRepoImpl: Get.find()));
 
     Get.lazyPut(() => AuthRepositoryImp(
@@ -46,11 +53,14 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => ViewedProductRepoImp());
     Get.lazyPut(() => WishlistRepoImp(Get.find(), Get.find()));
     Get.lazyPut(() => WishlistController(wishlistRepository: Get.find()));
-    Get.lazyPut(() => CartRepoImpl(
-        Get.find<FireStoreService>(), Get.find<FirebaseAuthService>()));
-    Get.lazyPut(() => CartController(cartRepository: Get.find()));
     Get.lazyPut(
-        () => ViewedProductController(viewedProductRepository: Get.find()));
+        () => CartRepoImpl(
+            Get.find<FireStoreService>(), Get.find<FirebaseAuthService>()),
+        fenix: true);
+    Get.lazyPut(() => CartController(cartRepository: Get.find()), fenix: true);
+    Get.lazyPut(
+        () => ViewedProductController(viewedProductRepository: Get.find()),
+        fenix: true);
     Get.lazyPut(() =>
         SplashController(firebaseAuthService: Get.find<FirebaseAuthService>()));
   }

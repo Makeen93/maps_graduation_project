@@ -1,13 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:maps_graduation_project/core/services/localization_service.dart';
+import 'package:maps_graduation_project/features/home/BL/controllers/theme_service_controller.dart';
 import 'package:maps_graduation_project/routes/app_routes.dart';
 
-import 'app_error_widget.dart';
+import 'core/services/shared_preferences_singletone.dart';
+import 'core/widgets/app_error_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Prefs.init(); // Initialize SharedPreferences
+  Get.lazyPut(() => ThemeServiceController());
+  Get.lazyPut(() => LocalizationService());
+
   ErrorWidget.builder = (FlutterErrorDetails details) => AppErrorWidget(
         errorDetails: details,
       );
@@ -19,10 +26,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: AppRouter.splash,
-      getPages: AppRouter.routes,
-    );
+    final themeService = Get.find<ThemeServiceController>();
+    final localizationService = Get.find<LocalizationService>();
+    return Obx(() {
+      return GetMaterialApp(
+        translations: LocalizationService(),
+        locale: Locale('${localizationService.loadLocaleFromPreferences()}'),
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: themeService.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppRouter.splash,
+        getPages: AppRouter.routes,
+      );
+    });
   }
 }

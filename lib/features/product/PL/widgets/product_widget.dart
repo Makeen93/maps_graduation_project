@@ -89,44 +89,49 @@ class ProductWidget extends StatelessWidget {
                             child: Material(
                               borderRadius: BorderRadius.circular(16.0),
                               color: Colors.lightBlue,
-                              child: InkWell(
-                                splashColor: Colors.red,
-                                borderRadius: BorderRadius.circular(16.0),
-                                onTap: () async {
-                                  if (cartController.isProductInCart(
-                                      productId: productController
-                                          .findByProdId(productId)!
-                                          .productId)) {
-                                    return;
-                                  }
-                                  // cartController.addProductToCart(
-                                  //     productId: productController.findByProdId(productId)!.productId);
-                                  try {
-                                    await cartController.addToCart(
-                                      productId: productController
-                                          .findByProdId(productId)!
-                                          .productId,
-                                      qty: 1,
-                                    );
-                                  } catch (error) {
-                                    methods.showErrorOrWarningDialog(
-                                        subtitle: error.toString(), fct: () {});
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    cartController.isProductInCart(
-                                            productId: productController
-                                                .findByProdId(productId)!
-                                                .productId)
-                                        ? Icons.check
-                                        : Icons.add_shopping_cart_rounded,
-                                    size: 20,
-                                    color: Colors.white,
+                              child: Obx(() {
+                                return InkWell(
+                                  splashColor: Colors.red,
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  onTap: () async {
+                                    if (cartController.isProductInCart(
+                                        productId: productController
+                                            .findByProdId(productId)!
+                                            .productId)) {
+                                      return;
+                                    }
+                                    cartController.addProductToCart(
+                                        productId: productController
+                                            .findByProdId(productId)!
+                                            .productId);
+                                    try {
+                                      await cartController.addToCart(
+                                        productId: productController
+                                            .findByProdId(productId)!
+                                            .productId,
+                                        qty: 1,
+                                      );
+                                    } catch (error) {
+                                      methods.showErrorOrWarningDialog(
+                                          subtitle: error.toString(),
+                                          fct: () {});
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      cartController.isProductInCart(
+                                              productId: productController
+                                                  .findByProdId(productId)!
+                                                  .productId)
+                                          ? Icons.check
+                                          : Icons.add_shopping_cart_rounded,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                             ),
                           ),
                           // SizedBox(

@@ -25,6 +25,7 @@ class CartRepoImpl extends CartRepo {
       ]);
     }
   }
+  
 
   @override
   Future<void> clearCart() async {
@@ -39,8 +40,18 @@ class CartRepoImpl extends CartRepo {
     final user = await _firebaseAuthService.getCurrentUser();
     if (user != null) {
       final data = await _fireStoreService.getUserCart(user.uid);
-      return data?['userCart'] ?? [];
+      if (data?['userCart'] != null && data!['userCart'] is List) {
+        return (data['userCart'] as List).cast<Map<String, dynamic>>();
+      }
     }
     return [];
+  }
+  
+  @override
+  Future<void> removeOneFromUserCart( String productId) async{
+    final user = await _firebaseAuthService.getCurrentUser();
+    if (user != null) {
+      await _fireStoreService.removeOneFromUserCart(user.uid,productId);
+    }
   }
 }

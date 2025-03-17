@@ -39,7 +39,6 @@ dependencies:
   firebase_auth: ^5.5.0
   cloud_firestore: ^5.6.4
   lottie: ^3.2.0
-  skeletonizer: ^1.4.3
   shared_preferences: ^2.5.2
   shimmer: ^3.0.0
   google_sign_in: ^6.2.2

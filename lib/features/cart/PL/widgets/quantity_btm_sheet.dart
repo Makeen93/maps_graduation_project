@@ -31,8 +31,8 @@ class QuantityBottomSheetWidget extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-                // shrinkWrap: true,
-                // physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: 30,
                 itemBuilder: (context, index) {
                   return Obx(() {

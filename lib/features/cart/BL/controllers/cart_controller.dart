@@ -10,25 +10,42 @@ class CartController extends GetxController {
   final CartRepoImpl cartRepository;
 
   var cartItems = <String, CartModel>{}.obs;
-  var isLoading = true.obs;
+  var isLoading = false.obs;
+  final RxString errorMessage = ''.obs;
   CartController({required this.cartRepository});
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    fetchCart();
-  }
-
-  Future<void> addToCart({required String productId, required int qty}) async {
-    await cartRepository.addToCart(productId, qty);
     await fetchCart();
   }
 
+  Future<void> addToCart({required String productId, required int qty}) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+      await cartRepository.addToCart(productId, qty);
+      await fetchCart();
+    } catch (error) {
+      errorMessage.value = error.toString();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void addProductToCart({required String productId}) {
-    cartItems.putIfAbsent(
-        productId,
-        () => CartModel(
-            cartId: const Uuid().v4(), productId: productId, quantity: 1));
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+      cartItems.putIfAbsent(
+          productId,
+          () => CartModel(
+              cartId: const Uuid().v4(), productId: productId, quantity: 1));
+    } catch (error) {
+      errorMessage.value = error.toString();
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void updateQuantity({required String productId, required int quantity}) {
@@ -39,23 +56,29 @@ class CartController extends GetxController {
   }
 
   Future<void> fetchCart() async {
-    final items = await cartRepository.fetchCart();
-    cartItems.clear();
-    for (var item in items) {
-      cartItems[item['productId']] = CartModel(
-        cartId: item['cartId'],
-        productId: item['productId'],
-        quantity: item['quantity'],
-      );
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+      final items = await cartRepository.fetchCart();
+      cartItems.clear();
+      // items.map((cart) => CartModel.fromJson(cart)).toList();
+
+      for (var item in items) {
+        cartItems[item['productId']] = CartModel(
+          cartId: item['cartId'],
+          productId: item['productId'],
+          quantity: item['quantity'],
+        );
+      }
+    } catch (error) {
+      errorMessage.value = error.toString();
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> clearCart() async {
     await cartRepository.clearCart();
-    cartItems.clear();
-  }
-
-  void clrearLocalCart() {
     cartItems.clear();
   }
 
@@ -81,8 +104,17 @@ class CartController extends GetxController {
     return total;
   }
 
-  void removeOneItem({required String productId}) {
-    cartItems.remove(productId);
+  removeOneItem({required String productId}) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+      await cartRepository.removeOneFromUserCart(productId);
+      cartItems.remove(productId);
+    } catch (error) {
+      errorMessage.value = error.toString();
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   bool isProductInCart({required String productId}) {

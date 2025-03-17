@@ -13,10 +13,9 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var productController = Get.find<ProductController>();
     var passedCategory = Get.arguments ?? '';
-    productController.productswithCategory.value = passedCategory == null
+    productController.newProducts.value = passedCategory == null
         ? productController.products
         : productController.findByCategory(ctgName: passedCategory);
-   
 
     return GestureDetector(
         onTap: () {
@@ -30,7 +29,7 @@ class SearchScreen extends StatelessWidget {
                 child: Image.asset(AssetsManager.shoppingCart),
               ),
             ),
-            body: productController.products.isEmpty
+            body: productController.newProducts.isEmpty
                 ? Center(child: TitlesTextWidget(label: 'No Product Found'.tr))
                 : Obx(() {
                     return Padding(
@@ -65,14 +64,16 @@ class SearchScreen extends StatelessWidget {
                                   productController.searchQuery(
                                       searchtext: productController
                                           .searchTextController.text,
-                                      passedList: productController.products);
+                                      passedList:
+                                          productController.newProducts);
                             },
                             onSubmitted: (value) {
                               productController.productListSearch.value =
                                   productController.searchQuery(
                                       searchtext: productController
                                           .searchTextController.text,
-                                      passedList: productController.products);
+                                      passedList:
+                                          productController.newProducts);
                             },
                           ),
                           const SizedBox(
@@ -93,7 +94,7 @@ class SearchScreen extends StatelessWidget {
                               itemCount: productController
                                       .searchTextController.text.isNotEmpty
                                   ? productController.productListSearch.length
-                                  : productController.products.length,
+                                  : productController.newProducts.length,
                               builder: ((context, index) {
                                 return ProductWidget(
                                   productId: productController
@@ -101,7 +102,7 @@ class SearchScreen extends StatelessWidget {
                                       ? productController
                                           .productListSearch[index].productId
                                       : productController
-                                          .products[index].productId,
+                                          .newProducts[index].productId,
                                 );
                               }),
                               crossAxisCount: 2,

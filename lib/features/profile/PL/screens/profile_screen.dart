@@ -3,15 +3,18 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:maps_graduation_project/core/services/firebase_auth_service.dart';
 import 'package:maps_graduation_project/core/services/my_app_method.dart';
+import 'package:maps_graduation_project/core/utils/convert_code_to_flag.dart';
 import 'package:maps_graduation_project/core/widgets/app_name_text.dart';
 import 'package:maps_graduation_project/core/widgets/loading_manger.dart';
 import 'package:maps_graduation_project/core/widgets/subtitle_text.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/auth/BL/controllers/auth_controller.dart';
+import 'package:maps_graduation_project/features/home/BL/controllers/theme_service_controller.dart';
 import 'package:maps_graduation_project/features/profile/BL/controllers/profile_controller.dart';
 import 'package:maps_graduation_project/routes/app_routes.dart';
 
 import '../../../../core/services/assets_manager.dart';
+import '../../../../core/services/localization_service.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({super.key});
@@ -22,6 +25,8 @@ class ProfileScreen extends GetView<ProfileController> {
     print('${controller.userModel}');
     var user = Get.find<FirebaseAuthService>();
     var authController = Get.find<AuthController>();
+    var themeController = Get.find<ThemeServiceController>();
+
     var myMethod = Get.find<MyAppMethods>();
     return Scaffold(
         appBar: AppBar(
@@ -156,22 +161,31 @@ class ProfileScreen extends GetView<ProfileController> {
                           AssetsManager.theme,
                           height: 30,
                         ),
-                        title: const Text(''
-                            // themeProvider.getIsDarkTheme
-                            //   ? 'Dark_mode'.tr
-                            //   : 'Light_mode'.tr
-                            ),
-                        value: true,
+                        title: Text(themeController.isDarkMode
+                            ? 'Dark Mode'.tr
+                            : 'Light Mode'.tr),
+                        value: themeController.isDarkMode,
                         // themeProvider.getIsDarkTheme,
                         onChanged: (value) {
-                          // themeProvider.setDarkTheme(themeValue: value);
+                          themeController.toggleTheme();
                         },
                       ),
                       CustomListTile(
                         imagePath: AssetsManager.langSvg,
                         text: 'Languages'.tr,
                         function: () async {
-                          // _showLanguageDialog(context);
+                          // Get.bottomSheet(Container(
+                          //   height: 150,
+                          //   color: Colors.amberAccent,
+                          //   child: const Center(
+                          //       child: Text(
+                          //     'Count has reached }',
+                          //     style: TextStyle(
+                          //         fontSize: 28.0, color: Colors.white),
+                          //   )),
+                          // ));
+                          showLanguageDialog();
+                          // Get.back();
                           // await Navigator.pushNamed(
                           //   context,
                           //   WishlistScreen.routName,
@@ -202,12 +216,6 @@ class ProfileScreen extends GetView<ProfileController> {
                       await myMethod.showErrorOrWarningDialog(
                           subtitle: 'Are you sure'.tr,
                           fct: () async {
-                            // await FirebaseAuth.instance.signOut();
-                            // if (!mounted) return;
-                            // await Navigator.pushNamed(
-                            //   context,
-                            //   LoginScreen.routName,
-                            // );
                             authController.signout();
                             Get.offAllNamed(AppRouter.login);
                           },
@@ -222,14 +230,48 @@ class ProfileScreen extends GetView<ProfileController> {
   }
 }
 
-// void _showLanguageDialog(BuildContext context) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return const LanguageDialog();
-//     },
-//   );
-// }
+void showLanguageDialog() {
+  var localController = Get.find<LocalizationService>();
+  Get.defaultDialog(
+    title: 'Select Language',
+    content: Column(
+      children: [
+        ListTile(
+          leading: Text("US".toFlag, style: const TextStyle(fontSize: 30)),
+          title: const Text('English'),
+          onTap: () {
+            localController.changeLocale('en');
+            Get.back();
+          },
+        ),
+        ListTile(
+          leading: Text("TR".toFlag, style: const TextStyle(fontSize: 30)),
+          title: const Text('Türkçe'),
+          onTap: () {
+            localController.changeLocale('tr');
+            Get.back();
+          },
+        ),
+        ListTile(
+          leading: Text("SA".toFlag, style: const TextStyle(fontSize: 30)),
+          title: const Text('العربية'),
+          onTap: () {
+            localController.changeLocale('ar');
+            Get.back();
+          },
+        ),
+      ],
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Get.back(); // Close the dialog
+        },
+        child: const Text('Cancel'),
+      ),
+    ],
+  );
+}
 
 class CustomListTile extends StatelessWidget {
   const CustomListTile(

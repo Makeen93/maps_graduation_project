@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:maps_graduation_project/core/services/assets_manager.dart';
@@ -38,8 +37,8 @@ class CartScreen extends StatelessWidget {
               },
             ),
             appBar: AppBar(
-              title: TitlesTextWidget(
-                  label: "${'Cart'.tr} (${cartController.cartItems.length})"),
+              title: Obx(() => TitlesTextWidget(
+                  label: "${'Cart'.tr} (${cartController.cartItems.length})")),
               leading: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset(AssetsManager.shoppingCart),
@@ -50,9 +49,7 @@ class CartScreen extends StatelessWidget {
                     myMethods.showErrorOrWarningDialog(
                         isError: false,
                         subtitle: 'Remove Items',
-                        // subtitle: 'Remove_Items'.tr,
                         fct: () async {
-                          // cartController.clrearLocalCart();
                           await cartController.clearCart();
                         });
                   },
@@ -60,30 +57,29 @@ class CartScreen extends StatelessWidget {
                     Icons.delete_forever_rounded,
                     color: Colors.red,
                   ),
-                ),
+                )
               ],
             ),
             body: LoadingWidget(
               isLoading: cartController.isLoading.value,
               child: Column(
                 children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: cartController.cartItems.length,
-                      itemBuilder: (context, index) {
-                        return null;
-
-                        // return ChangeNotifierProvider.value(
-                        //     value: cartController.getCartItems.values
-                        //         .toList()
-                        //         .reversed
-                        //         .toList()[index],
-                        //     child:  CartWidget());
-                      },
-                    ),
-                  ),
+                  Obx(() {
+                    return Expanded(
+                      child: ListView.builder(
+                        // reverse: true,
+                        itemCount: cartController.cartItems.length,
+                        itemBuilder: (context, index) {
+                          var cartItem =
+                              cartController.cartItems.values.toList()[index];
+                          print("MMMMMMMMMMMMMMMMMMMMM${cartItem.productId}");
+                          return CartWidget(cart: cartItem);
+                        },
+                      ),
+                    );
+                  }),
                   const SizedBox(
-                    height: kBottomNavigationBarHeight + 10,
+                    height: kBottomNavigationBarHeight + 25,
                   )
                 ],
               ),

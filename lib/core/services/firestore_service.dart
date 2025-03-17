@@ -1,13 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:maps_graduation_project/core/services/database_service.dart';
 import 'package:maps_graduation_project/features/auth/DL/data/models/user_model.dart';
-
-import 'package:maps_graduation_project/features/auth/DL/domain/entites/user_entity.dart';
 import 'package:maps_graduation_project/features/product/DL/data/models/product_model.dart';
-
-import 'firebase_auth_service.dart';
 
 class FireStoreService implements DatabaseService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -20,17 +15,7 @@ class FireStoreService implements DatabaseService {
       print(userId);
       var doc = await usersDb.doc(userId).get();
       if (doc.exists) {
-        print('------------------------------------------$doc');
         return UserModel.fromFirestore(doc);
-        // return UserModel(
-        //   userId: doc.data()?['userId'],
-        //   userName: doc.data()?['userName'],
-        //   userImage: doc.data()?['userImage'],
-        //   userEmail: doc.data()?['userEmail'],
-        //   // createdAt: doc.data()?['createdAt'],
-        //   userCart: doc.data()?['userCart'] ?? [],
-        //   userWish: doc.data()?['userWish'] ?? [],
-        // );
       } else {
         throw Exception('User not found');
       }
@@ -83,6 +68,24 @@ class FireStoreService implements DatabaseService {
 
   Future<void> clearUserCart(String uid) async {
     await usersDb.doc(uid).update({"userCart": []});
+  }
+
+  Future<void> removeOneFromUserCart(String uid, String productId) async {
+    final userDoc = await usersDb.doc(uid).get();
+    if (userDoc.exists) {
+      final userData = userDoc.data();
+
+      // Step 2: Get the current userCart array
+      if (userData != null && userData['userCart'] is List) {
+        List<dynamic> userCart = List.from(userData['userCart']);
+
+        // Step 3: Remove the product with the given productId
+        userCart.removeWhere((item) => item['productId'] == productId);
+
+        // Step 4: Update the userCart in Firestore
+        await usersDb.doc(uid).update({"userCart": userCart});
+      }
+    }
   }
 
   Future<Map<String, dynamic>?> getUserCart(String uid) async {

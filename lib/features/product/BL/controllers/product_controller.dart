@@ -12,7 +12,7 @@ class ProductController extends GetxController {
     required this.productRepoImpl,
   });
   var products = <ProductModel>[].obs;
-  var productswithCategory = <ProductModel>[].obs;
+  var newProducts = <ProductModel>[].obs;
   var productListSearch = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;

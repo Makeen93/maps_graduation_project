@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
 import 'package:maps_graduation_project/features/cart/PL/screens/cart_screen.dart';
 import 'package:maps_graduation_project/features/home/BL/controllers/root_controller.dart';
 import 'package:maps_graduation_project/features/home/PL/screens/search_screen.dart';
@@ -22,6 +23,7 @@ class RootScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cartController = Get.find<CartController>();
     return Scaffold(
       body: SafeArea(child: Obx(() => pages[controller.selectedIndex.value])),
       bottomNavigationBar: Obx(
@@ -44,11 +46,12 @@ class RootScreen extends StatelessWidget {
             ),
             NavigationDestination(
               selectedIcon: const Icon(IconlyBold.bag_2),
-              icon: const Badge(
+              icon: Badge(
                 backgroundColor: Colors.blue,
-                // label: Text((cartProvider.getCartItems.length.toString()+cartProvider.getCartItems.length.toString())),
-                label: Text('a'),
-                child: Icon(IconlyLight.bag_2),
+                label: Obx(() {
+                  return Text((cartController.cartItems.length.toString()));
+                }),
+                child: const Icon(IconlyLight.bag_2),
               ),
               label: 'Cart'.tr,
             ),
