@@ -5,8 +5,6 @@ import 'package:maps_graduation_project/core/widgets/app_name_text.dart';
 import 'package:maps_graduation_project/core/widgets/subtitle_text.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/auth/BL/controllers/auth_controller.dart';
-import 'package:maps_graduation_project/features/auth/PL/screens/register_screen.dart';
-import 'package:maps_graduation_project/features/auth/PL/widgets/custom_text_form_field.dart';
 import 'package:maps_graduation_project/routes/app_routes.dart';
 
 import '../widgets/google_btn.dart';
@@ -38,9 +36,9 @@ class LoginScreen extends GetView<AuthController> {
               const SizedBox(height: 60.0),
               const AppNameTextWidget(fontSize: 30),
               const SizedBox(height: 16.0),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: TitlesTextWidget(label: 'Welcome back'),
+                child: TitlesTextWidget(label: 'Welcome back'.tr),
               ),
               const SizedBox(height: 16.0),
               Form(
@@ -52,9 +50,9 @@ class LoginScreen extends GetView<AuthController> {
                       focusNode: _emailFocusNode,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        hintText: 'Email address',
-                        prefixIcon: Icon(Icons.email),
+                      decoration: InputDecoration(
+                        hintText: 'Email address'.tr,
+                        prefixIcon: const Icon(Icons.email),
                       ),
                       validator: (value) {
                         return MyValidators.emailValidator(value);
@@ -105,8 +103,8 @@ class LoginScreen extends GetView<AuthController> {
                         onPressed: () {
                           Get.toNamed('');
                         },
-                        child: const SubtitleTextWidget(
-                          label: 'Forgot password',
+                        child: SubtitleTextWidget(
+                          label: 'Forgot password'.tr,
                           textDecoration: TextDecoration.underline,
                           fontStyle: FontStyle.italic,
                         ),
@@ -123,9 +121,9 @@ class LoginScreen extends GetView<AuthController> {
                           ),
                         ),
                         icon: const Icon(Icons.login),
-                        label: const Text(
-                          'Login',
-                          style: TextStyle(fontSize: 20),
+                        label: Text(
+                          'Login'.tr,
+                          style: const TextStyle(fontSize: 20),
                         ),
                         onPressed: () async {
                           if (true) {
@@ -138,7 +136,7 @@ class LoginScreen extends GetView<AuthController> {
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    const SubtitleTextWidget(label: 'OR CONNECT USING'),
+                    SubtitleTextWidget(label: 'OR CONNECT USING'.tr),
                     const SizedBox(height: 16.0),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -167,9 +165,9 @@ class LoginScreen extends GetView<AuthController> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Guest',
-                                    style: TextStyle(fontSize: 20),
+                                  child: Text(
+                                    'Guest'.tr,
+                                    style: const TextStyle(fontSize: 20),
                                   ),
                                   onPressed: () {
                                     Get.offAllNamed('');
@@ -185,11 +183,10 @@ class LoginScreen extends GetView<AuthController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SubtitleTextWidget(
-                            label: 'Don\'t have an account?'),
+                        SubtitleTextWidget(label: 'Don\'t have an account?'.tr),
                         TextButton(
-                          child: const SubtitleTextWidget(
-                            label: 'Sign up',
+                          child: SubtitleTextWidget(
+                            label: 'Sign up'.tr,
                             textDecoration: TextDecoration.underline,
                             fontStyle: FontStyle.italic,
                           ),

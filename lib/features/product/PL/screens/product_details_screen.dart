@@ -6,6 +6,7 @@ import 'package:maps_graduation_project/core/services/my_app_method.dart';
 import 'package:maps_graduation_project/core/widgets/app_name_text.dart';
 import 'package:maps_graduation_project/core/widgets/subtitle_text.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
+import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
 import 'package:maps_graduation_project/features/product/PL/widgets/heart_btn.dart';
 
@@ -18,6 +19,7 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var myMethod = Get.find<MyAppMethods>();
     var productController = Get.find<ProductController>();
+    var cartController = Get.find<CartController>();
     var productId = Get.arguments;
     final product = productController.findByProdId(productId);
     Size size = MediaQuery.of(context).size;
@@ -92,52 +94,50 @@ class ProductDetailsScreen extends StatelessWidget {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Expanded(
-                                child: SizedBox(
-                                  height: kBottomNavigationBarHeight - 10,
-                                  child: ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.lightBlue,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          30,
+                              Obx(() {
+                                return Expanded(
+                                  child: SizedBox(
+                                    height: kBottomNavigationBarHeight - 10,
+                                    child: ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.lightBlue,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    onPressed: () async {
-                                      //  if (cartProvider.isProductInCart(
-                                      //       productId: product.productId)) {
-                                      //     return;
-                                      //   }
-                                      //  try {
-                                      //     await cartProvider.addToCartFirebase(
-                                      //         productId: product.productId,
-                                      //         qty: 1,
-                                      //         context: context);
-                                      //   } catch (error) {
-                                      //     // ignore: use_build_context_synchronously
-                                      //     MyAppMethods.showErrorORWarningDialog(
-                                      //         context: context,
-                                      //         subtitle: error.toString(),
-                                      //         fct: () {});
-                                      //   }
-                                    },
-                                    icon: const Icon(
-                                        // cartProvider.isProductInCart(
-                                        //     productId: product.productId)
-                                        // ? Icons.check
-                                        // :
-                                        Icons.add_shopping_cart),
-                                    label: Text(
-                                      // cartProvider.isProductInCart(
-                                      //         productId: product.productId)
-                                      //     ? 'In Cart'.tr
-                                      //     :
-                                      'Add to cart'.tr,
+                                      onPressed: () async {
+                                        if (cartController.isProductInCart(
+                                            productId: product.productId)) {
+                                          return;
+                                        }
+                                        try {
+                                          await cartController.addToCart(
+                                            productId: product.productId,
+                                            qty: 1,
+                                          );
+                                        } catch (error) {
+                                          // ignore: use_build_context_synchronously
+                                          myMethod.showErrorOrWarningDialog(
+                                              subtitle: error.toString(),
+                                              fct: () {});
+                                        }
+                                      },
+                                      icon: Icon(cartController.isProductInCart(
+                                              productId: product.productId)
+                                          ? Icons.check
+                                          : Icons.add_shopping_cart),
+                                      label: Text(
+                                        cartController.isProductInCart(
+                                                productId: product.productId)
+                                            ? 'In Cart'.tr
+                                            : 'Add to cart'.tr,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -149,7 +149,7 @@ class ProductDetailsScreen extends StatelessWidget {
                           children: [
                             TitlesTextWidget(label: 'About this item'.tr),
                             SubtitleTextWidget(
-                                label: "In ${product.productCategory}")
+                                label: "In ${product.productCategory}".tr)
                           ],
                         ),
                         const SizedBox(

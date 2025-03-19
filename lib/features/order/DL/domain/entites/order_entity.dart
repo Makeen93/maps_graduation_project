@@ -1,26 +1,33 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../../product/DL/data/models/product_model.dart';
+
+enum OrderStatus {
+  pending,
+  processing,
+  shipped,
+  delivered,
+  cancelled,
+}
 
 class OrderEntity {
   final String orderId;
   final String userId;
-  final String productId;
-  final String productTitle;
   final String userName;
-  final String price;
-  final String totalPrice;
-  final String imageUrl;
-  final String quantity;
+  final List<ProductModel> products;
+  final double totalPrice;
   final Timestamp orderDate;
+  final OrderStatus orderStatus;
   OrderEntity({
     required this.orderId,
     required this.userId,
-    required this.productId,
-    required this.productTitle,
     required this.userName,
-    required this.price,
+    required this.products,
     required this.totalPrice,
-    required this.imageUrl,
-    required this.quantity,
     required this.orderDate,
+     required this.orderStatus,
   });
 }

@@ -5,12 +5,14 @@ import 'package:maps_graduation_project/core/services/my_app_method.dart';
 import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/viewed_product_controller.dart';
+import 'package:maps_graduation_project/features/product/DL/data/models/product_model.dart';
+import 'package:maps_graduation_project/routes/app_routes.dart';
 import '../../../../core/widgets/subtitle_text.dart';
 import 'heart_btn.dart';
 
 class LatestArrivalProductsWidget extends StatelessWidget {
-  const LatestArrivalProductsWidget({super.key});
-
+  final ProductModel productModel;
+  const LatestArrivalProductsWidget({super.key, required this.productModel});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -18,17 +20,16 @@ class LatestArrivalProductsWidget extends StatelessWidget {
 
     final cartController = Get.find<CartController>();
     final myAppMethods = Get.find<MyAppMethods>();
-
+    var product = productController.findByProdId(productModel.productId);
     final viewController = Get.find<ViewedProductController>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () async {
-          // viewController.addProductToHistory(
-          //      productController.productId);
-          // await Navigator.pushNamed(context, ProductDetails.routName,
-          //     arguments: productController.productId);
+          viewController.addProductToHistory(productModel.productId);
+          Get.toNamed(AppRouter.productDetail,
+              arguments: productModel.productId);
         },
         child: SizedBox(
           width: size.width * 0.45,
@@ -39,8 +40,7 @@ class LatestArrivalProductsWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: FancyShimmerImage(
-                    imageUrl: '',
-                    // productController.productImage,
+                    imageUrl: product!.productImage,
                     width: size.width * 0.28,
                     height: size.width * 0.28,
                   ),
@@ -53,56 +53,53 @@ class LatestArrivalProductsWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '',
-                      // productController.productTitle,
+                    Text(
+                      product.productTitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    FittedBox(
-                      child: Row(
-                        children: [
-                          // HeartButtonWidget(
-                          //     productId: productController.productId
-                          //     ),
-                          IconButton(
-                            onPressed: () async {
-                              // if (cartController.isProductInCart(
-                              //     productId: productController.productId)) {
-                              //   return;
-                              // }
-                              // cartController.addProductToCart(
-                              //     productId: getCurrProduct.productId);
-                              // try {
-                              //   await cartController.addToCart(
-                              //     productId: productController.productId,
-                              //     qty: 1,
-                              //   );
-                              // } catch (error) {
-                              //   // ignore: use_build_context_synchronously
-                              //   myAppMethods.showErrorOrWarningDialog(
-                              //       subtitle: error.toString(), fct: () {});
-                              // }
-                            },
-                            icon: const Icon(
-                              // cartController.isProductInCart(
-                              //         productId: productController.productId)
-                              //     ?
-                              //  Icons.check
-                              // :
-                              Icons.add_shopping_cart_rounded,
-                              size: 18,
+                    Obx(() {
+                      return FittedBox(
+                        child: Row(
+                          children: [
+                            HeartButtonWidget(productId: product.productId),
+                            IconButton(
+                              onPressed: () async {
+                                if (cartController.isProductInCart(
+                                    productId: product.productId)) {
+                                  return;
+                                }
+                                cartController.addProductToCart(
+                                    productId: product.productId);
+                                try {
+                                  await cartController.addToCart(
+                                    productId: product.productId,
+                                    qty: 1,
+                                  );
+                                } catch (error) {
+                                  // ignore: use_build_context_synchronously
+                                  myAppMethods.showErrorOrWarningDialog(
+                                      subtitle: error.toString(), fct: () {});
+                                }
+                              },
+                              icon: Icon(
+                                cartController.isProductInCart(
+                                        productId: product.productId)
+                                    ? Icons.check
+                                    : Icons.add_shopping_cart_rounded,
+                                size: 18,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      );
+                    }),
+                    FittedBox(
+                      child: SubtitleTextWidget(
+                        label: "${product.productPrice}\$",
+                        color: Colors.blue,
                       ),
                     ),
-                    // FittedBox(
-                    //   child: SubtitleTextWidget(
-                    //     label: "${productController.productPrice}\$",
-                    //     color: Colors.blue,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

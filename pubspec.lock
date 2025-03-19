@@ -552,6 +552,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  lingo_hunter:
+    dependency: "direct main"
+    description:
+      name: lingo_hunter
+      sha256: fca9c7b3a3b5bceeb6f8715390b3375b8df5aa58a5003762239cf7abede74db3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   lints:
     dependency: transitive
     description:

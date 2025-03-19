@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:maps_graduation_project/core/widgets/app_name_text.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
+import 'package:maps_graduation_project/features/product/BL/controllers/viewed_product_controller.dart';
 import 'package:maps_graduation_project/features/product/PL/widgets/ctg_rounded_widget.dart';
 import 'package:maps_graduation_project/features/product/PL/widgets/latest_arrival.dart';
 
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var productController = Get.find<ProductController>();
+    var lastArrivalController = Get.find<ViewedProductController>();
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -58,34 +60,40 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 18,
               ),
-              Visibility(
-                visible: productController.products.isNotEmpty,
-                child: TitlesTextWidget(
-                  label: 'Latest arrival'.tr,
-                  fontSize: 22,
-                ),
-              ),
+              Obx(() {
+                return Visibility(
+                  visible: productController.products.isNotEmpty,
+                  child: TitlesTextWidget(
+                    label: 'Latest arrival'.tr,
+                    fontSize: 22,
+                  ),
+                );
+              }),
               const SizedBox(
                 height: 18,
               ),
-              Visibility(
-                visible: productController.products.isNotEmpty,
-                child: SizedBox(
-                  height: size.height * 0.2,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: productController.products.length < 10
-                          ? productController.products.length
-                          : 10,
-                      itemBuilder: (context, index) {
-                        return null;
+              Obx(() {
+                return Visibility(
+                  visible: productController.products.isNotEmpty,
+                  child: SizedBox(
+                    height: size.height * 0.2,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: productController.products.length < 10
+                            ? productController.products.length
+                            : 10,
+                        itemBuilder: (context, index) {
+                          var productlItem = productController.products[index];
+                          return LatestArrivalProductsWidget(
+                              productModel: productlItem);
 
-                        // return ChangeNotifierProvider.value(
-                        //     value: controller.products[index],
-                        //     child: const LatestArrivalProductsWidget());
-                      }),
-                ),
-              ),
+                          // return ChangeNotifierProvider.value(
+                          //     value: controller.products[index],
+                          //     child: const LatestArrivalProductsWidget());
+                        }),
+                  ),
+                );
+              }),
               const SizedBox(
                 height: 18,
               ),

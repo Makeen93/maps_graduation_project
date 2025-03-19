@@ -30,10 +30,10 @@ class RegisterController extends GetxController {
       await authRepository.addUser(
           email: email, filePath: filePath, password: password, name: name);
       CustomSnackbar.show(
-          title: 'Success', message: 'User registered successfully');
+          title: 'Success'.tr, message: 'User registered successfully'.tr);
       Get.offAllNamed(AppRouter.login);
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error'.tr, e.toString());
     } finally {
       isLoading.value = false;
     }

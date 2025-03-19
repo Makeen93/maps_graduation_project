@@ -53,6 +53,7 @@ class CartController extends GetxController {
         productId,
         (item) => CartModel(
             cartId: item.cartId, productId: productId, quantity: quantity));
+    // update();
   }
 
   Future<void> fetchCart() async {

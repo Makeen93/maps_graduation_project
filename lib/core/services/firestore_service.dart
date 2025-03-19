@@ -8,11 +8,11 @@ class FireStoreService implements DatabaseService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final usersDb = FirebaseFirestore.instance.collection('users');
   final productDB = FirebaseFirestore.instance.collection('products');
+  final orderDB = FirebaseFirestore.instance.collection('orders');
   // late final doc;
 
   Future<UserModel> getUser(String userId) async {
     try {
-      print(userId);
       var doc = await usersDb.doc(userId).get();
       if (doc.exists) {
         return UserModel.fromFirestore(doc);
@@ -29,7 +29,7 @@ class FireStoreService implements DatabaseService {
       List<ProductModel> productsList = [];
 
       await productDB
-          // .orderBy('createdAt', descending: false)
+          .orderBy('createdAt', descending: false)
           .get()
           .then((productsSnapshot) {
         productsList.clear();

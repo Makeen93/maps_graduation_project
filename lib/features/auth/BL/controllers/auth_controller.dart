@@ -20,7 +20,7 @@ class AuthController extends GetxController {
           email: email, password: password);
       Get.toNamed(AppRouter.home); // Navigate to root screen after login
     } on FirebaseAuthException catch (error) {
-      errorMessage.value = error.message ?? 'An error occurred';
+      errorMessage.value = error.message ?? 'An error occurred'.tr;
     } catch (error) {
       errorMessage.value = error.toString();
     } finally {
@@ -35,7 +35,7 @@ class AuthController extends GetxController {
       await _authRepository.signOut();
       Get.offAll(AppRouter.login);
     } on FirebaseAuthException catch (error) {
-      errorMessage.value = error.message ?? 'An error occurred';
+      errorMessage.value = error.message ?? 'An error occurred'.tr;
     } catch (error) {
       errorMessage.value = error.toString();
     } finally {

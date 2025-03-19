@@ -14,7 +14,7 @@ class SearchScreen extends StatelessWidget {
     var productController = Get.find<ProductController>();
     var passedCategory = Get.arguments ?? '';
     productController.newProducts.value = passedCategory == null
-        ? productController.products
+        ? productController.products.value
         : productController.findByCategory(ctgName: passedCategory);
 
     return GestureDetector(

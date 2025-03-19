@@ -11,7 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.hintText,
     required this.prefixIcon,
@@ -20,7 +20,7 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +28,28 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         hintText: hintText,
+        hintStyle: const TextStyle(color: Color(0xFF757575)),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
         prefixIcon: Icon(prefixIcon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.blue, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.grey, width: 1.0),
-        ),
+        border: authOutlineInputBorder,
+        //  OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(10.0),
+        // ),
+        enabledBorder: authOutlineInputBorder,
+        focusedBorder: authOutlineInputBorder.copyWith(
+            borderSide: const BorderSide(color: Color(0xFFFF7643))),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.red, width: 2.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.red, width: 2.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
         ),
       ),
       obscureText: obscureText,
@@ -57,3 +59,31 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
+
+const authOutlineInputBorder = OutlineInputBorder(
+  borderSide: BorderSide(color: Color(0xFF757575)),
+  borderRadius: BorderRadius.all(Radius.circular(100)),
+);
+
+// TextFormField(
+//               onSaved: (password) {},
+//               onChanged: (password) {},
+//               obscureText: true,
+//               textInputAction: TextInputAction.next,
+//               decoration: InputDecoration(
+//                   hintText: "Enter your password",
+//                   labelText: "Password",
+//                   floatingLabelBehavior: FloatingLabelBehavior.always,
+//                   hintStyle: const TextStyle(color: Color(0xFF757575)),
+                  // contentPadding: const EdgeInsets.symmetric(
+                  //   horizontal: 24,
+                  //   vertical: 16,
+                  // ),
+//                   suffix: SvgPicture.string(
+//                     lockIcon,
+//                   ),
+//                   border: authOutlineInputBorder,
+//                   enabledBorder: authOutlineInputBorder,
+//                   focusedBorder: authOutlineInputBorder.copyWith(
+//                       borderSide: const BorderSide(color: Color(0xFFFF7643)))),
+//             ),

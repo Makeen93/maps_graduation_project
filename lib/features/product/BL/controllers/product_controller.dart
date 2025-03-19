@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:maps_graduation_project/core/widgets/custom_snackbar.dart';
 import 'package:maps_graduation_project/features/product/DL/data/models/product_model.dart';
 
 import 'package:maps_graduation_project/features/product/DL/data/repos/product_repo_impl.dart';
@@ -13,6 +14,7 @@ class ProductController extends GetxController {
   });
   var products = <ProductModel>[].obs;
   var newProducts = <ProductModel>[].obs;
+  // var viewedProductItems = <String, ViewedProductModel>{}.obs;
   var productListSearch = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
@@ -80,11 +82,10 @@ class ProductController extends GetxController {
 
       final fetchedPosts = await productRepoImpl.fetchProducts();
       products.value = fetchedPosts;
-      print('MAKEEN${products.length}');
       return products;
     } catch (e, s) {
-      print(s);
       errorMessage.value = e.toString();
+      CustomSnackbar.show(message: '$e', title: 'Erorr');
       throw Exception();
     } finally {
       isLoading.value = false;

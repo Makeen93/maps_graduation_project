@@ -10,6 +10,6 @@ abstract class AuthRepo {
       required XFile? filePath,
       required String password,
       required String name});
-  Future<UserEntity> getUser(String userId);
+  // Future<UserEntity> getUser(String userId);
   //Future<UserEntity> signinWithGoogle();
 }

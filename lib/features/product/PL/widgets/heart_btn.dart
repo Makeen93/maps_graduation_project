@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:maps_graduation_project/core/services/my_app_method.dart';
-import 'package:maps_graduation_project/features/product/BL/controllers/wishlist_controller.dart';
+import 'package:maps_graduation_project/features/wishList/BL/controllers/wishlist_controller.dart';
 
 class HeartButtonWidget extends StatelessWidget {
   const HeartButtonWidget({

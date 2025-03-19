@@ -3,16 +3,13 @@ import 'package:uuid/uuid.dart';
 import '../models/viewed_product_model.dart';
 
 class ViewedProductRepoImp extends ViewedProductRepo {
-  final Map<String, ViewedProductModel> _viewedProductItems = {};
-
-  Map<String, ViewedProductModel> get viewedProductItems => _viewedProductItems;
 
   @override
-  void addProductToHistory(String productId) {
-    if (_viewedProductItems.containsKey(productId)) {
-      _viewedProductItems.remove(productId);
+  void addProductToHistory(String productId,Map<String, ViewedProductModel> viewedProductItems) {
+    if (viewedProductItems.containsKey(productId)) {
+      viewedProductItems.remove(productId);
     } else {
-      _viewedProductItems[productId] = ViewedProductModel(
+      viewedProductItems[productId] = ViewedProductModel(
         id: const Uuid().v4(),
         productId: productId,
       );

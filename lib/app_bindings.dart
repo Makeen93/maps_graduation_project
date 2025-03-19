@@ -7,9 +7,11 @@ import 'package:maps_graduation_project/features/auth/BL/controllers/register_co
 import 'package:maps_graduation_project/features/auth/DL/data/repos/auth_repo_impl.dart';
 import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
 import 'package:maps_graduation_project/features/cart/DL/data/repos/cart_repo_impl.dart';
+import 'package:maps_graduation_project/features/order/BL/controllers/order_controller.dart';
+import 'package:maps_graduation_project/features/order/DL/data/repos/order_repo_imp.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/viewed_product_controller.dart';
-import 'package:maps_graduation_project/features/product/BL/controllers/wishlist_controller.dart';
+import 'package:maps_graduation_project/features/wishList/BL/controllers/wishlist_controller.dart';
 import 'package:maps_graduation_project/features/product/DL/data/repos/viewed_product_repo_imp.dart';
 import 'package:maps_graduation_project/features/product/DL/data/repos/wishlist_repo_imp.dart';
 import 'package:maps_graduation_project/features/profile/BL/controllers/profile_controller.dart';
@@ -58,6 +60,16 @@ class AppBinding extends Bindings {
             Get.find<FireStoreService>(), Get.find<FirebaseAuthService>()),
         fenix: true);
     Get.lazyPut(() => CartController(cartRepository: Get.find()), fenix: true);
+
+    Get.lazyPut(
+        () => OrderRepoImp(
+            Get.find<FirebaseAuthService>(),
+            Get.find<FireStoreService>(),
+            Get.find<CartController>(),
+            Get.find<ProductController>(),
+            Get.find<ProfileController>()),
+        fenix: true);
+    Get.lazyPut(() => OrderController(Get.find<OrderRepoImp>()), fenix: true);
     Get.lazyPut(
         () => ViewedProductController(viewedProductRepository: Get.find()),
         fenix: true);

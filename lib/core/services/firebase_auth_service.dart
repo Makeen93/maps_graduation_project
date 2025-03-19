@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:maps_graduation_project/core/errors/exceptions.dart';
 import '../../features/auth/DL/data/models/user_model.dart';
@@ -22,26 +23,8 @@ class FirebaseAuthService {
       if (userDoc.exists) {
         userModel = UserModel.fromFirestore(userDoc);
         return userModel;
-        // Or handle accordingly
       }
-      // final userDocDict = userDoc.data();
-      // print('${userDoc.get("userId")}');
-      // print('${userDoc.get("userName")}');
-      // print('${userDoc.get("userImage")}');
-      // print('${userDoc.get("userEmail")}');
-      // userModel = UserModel(
-      //   userId: userDoc.get("userId") ?? '',
-      //   userName: userDoc.get("userName") ?? '',
-      //   userImage: userDoc.get("userImage") ?? '',
-      //   userEmail: userDoc.get('userEmail') ?? '',
-      //   userCart:
-      //       userDocDict!.containsKey("userCart") ? userDoc.get("userCart") : [],
-      //   userWish:
-      //       userDocDict.containsKey("userWish") ? userDoc.get("userWish") : [],
-      //   // createdAt: userDoc.get('createdAt'),
-      // );
 
-      print('************************$userModel');
       return userModel;
     } on FirebaseException catch (error) {
       throw error.message.toString();
@@ -64,21 +47,21 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       log('Exception in FirebaseAuthService.createUserWithEmailAndPassword: ${e.toString()} and code: ${e.code}');
       if (e.code == 'weak-password') {
-        throw CustomException(message: 'كلمة المرور ضعيفة');
+        throw CustomException(message: 'كلمة المرور ضعيفة'.tr);
       } else if (e.code == 'network-request-failed') {
-        throw CustomException(message: 'تأكد من اتصالك بالانترنت');
+        throw CustomException(message: 'تأكد من اتصالك بالانترنت'.tr);
       } else if (e.code == 'email-already-in-use') {
         throw CustomException(
-            message: 'لقد قمت بالتسجيل مسبقا. الرجاء تسجيل الدخول');
+            message: 'لقد قمت بالتسجيل مسبقا. الرجاء تسجيل الدخول'.tr);
       } else {
         throw CustomException(
-            message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى');
+            message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى'.tr);
       }
     } catch (e) {
       log('Exception in FirebaseAuthService.createUserWithEmailAndPassword: ${e.toString()}');
 
       throw CustomException(
-          message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى');
+          message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى'.tr);
     }
   }
 
@@ -93,20 +76,20 @@ class FirebaseAuthService {
       log('Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()} and code: ${e.code}');
       if (e.code == 'user-not-found') {
         throw CustomException(
-            message: 'كلمة المرور أو البريد الالكتروني غير صحيحة');
+            message: 'كلمة المرور أو البريد الالكتروني غير صحيحة'.tr);
       } else if (e.code == 'wrong-password') {
         throw CustomException(
-            message: 'كلمة المرور أو البريد الالكتروني غير صحيحة');
+            message: 'كلمة المرور أو البريد الالكتروني غير صحيحة'.tr);
       } else if (e.code == 'network-request-failed') {
-        throw CustomException(message: 'تأكد من اتصالك بالانترنت');
+        throw CustomException(message: 'تأكد من اتصالك بالانترنت'.tr);
       } else {
         throw CustomException(
-            message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى');
+            message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى'.tr);
       }
     } catch (e) {
       log('Exception in FirebaseAuthService.signInWithEmailAndPassword: ${e.toString()}');
       throw CustomException(
-          message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى');
+          message: 'لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى'.tr);
     }
   }
 

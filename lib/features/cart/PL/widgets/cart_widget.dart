@@ -89,37 +89,38 @@ class CartWidget extends StatelessWidget {
                                 color: Colors.blue,
                               ),
                               const Spacer(),
-                              OutlinedButton.icon(
-                                style: OutlinedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  side: const BorderSide(
-                                    width: 2,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  await showModalBottomSheet(
-                                    backgroundColor: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(16.0),
-                                        topRight: Radius.circular(16.0),
-                                      ),
-                                    ),
-                                    context: context,
-                                    builder: (context) {
-                                      return QuantityBottomSheetWidget(
-                                        cartModel: cart!,
-                                      );
-                                    },
-                                  );
-                                },
-                                icon: const Icon(IconlyLight.arrow_down_2),
-                                label: Text("${'Qty'.tr}: ${cart!.quantity} "),
-                              ),
+                              QuantityBottomSheetWidget(cartModel: cart!)
+                              // OutlinedButton.icon(
+                              //   style: OutlinedButton.styleFrom(
+                              //     shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(30),
+                              //     ),
+                              //     side: const BorderSide(
+                              //       width: 2,
+                              //       color: Colors.blue,
+                              //     ),
+                              //   ),
+                              //   onPressed: () async {
+                              //     await showModalBottomSheet(
+                              //       backgroundColor: Theme.of(context)
+                              //           .scaffoldBackgroundColor,
+                              //       shape: const RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.only(
+                              //           topLeft: Radius.circular(16.0),
+                              //           topRight: Radius.circular(16.0),
+                              //         ),
+                              //       ),
+                              //       context: context,
+                              //       builder: (context) {
+                              //         return QuantityBottomSheetWidget(
+                              //           cartModel: cart!,
+                              //         );
+                              //       },
+                              //     );
+                              //   },
+                              //   icon: const Icon(IconlyLight.arrow_down_2),
+                              //   label: Text("${'Qty'.tr}: ${cart!.quantity} "),
+                              // ),
                             ],
                           )
                         ],

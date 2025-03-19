@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:maps_graduation_project/core/errors/exceptions.dart';
 
@@ -58,7 +59,7 @@ class AuthRepositoryImp extends AuthRepo {
     } catch (e) {
       await deleteUser(user);
       log('Exception in AuthRepoImp.createUserWithEmailAndPassword: ${e.toString()}');
-      ServerFailure("لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى");
+      ServerFailure("لقد حدث خطأ ما. الرجاء المحاولة مرة اخرى".tr);
       throw CustomException(message: e.toString());
     }
   }
@@ -100,11 +101,5 @@ class AuthRepositoryImp extends AuthRepo {
   @override
   Future<void> signOut() async {
     await auth.signOut();
-  }
-  
-  @override
-  Future<UserEntity> getUser(String userId) {
-    // TODO: implement getUser
-    throw UnimplementedError();
   }
 }

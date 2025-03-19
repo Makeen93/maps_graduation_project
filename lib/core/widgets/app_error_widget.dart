@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppErrorWidget extends StatelessWidget {
   final FlutterErrorDetails errorDetails;
@@ -22,10 +23,10 @@ class AppErrorWidget extends StatelessWidget {
               color: Colors.red,
               size: 100,
             ),
-            const Text(
-              "Error",
+            Text(
+              "Error".tr,
               textDirection: TextDirection.ltr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.w700,
               ),

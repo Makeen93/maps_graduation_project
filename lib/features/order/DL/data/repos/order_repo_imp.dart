@@ -1,11 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:maps_graduation_project/core/services/firestore_service.dart';
+import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
 import 'package:maps_graduation_project/features/order/DL/data/models/order_model.dart';
+import 'package:maps_graduation_project/features/order/DL/domain/entites/order_entity.dart';
 import 'package:maps_graduation_project/features/order/DL/domain/repos/order_repo.dart';
+import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
+import 'package:maps_graduation_project/features/product/DL/data/models/product_model.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../../core/services/firebase_auth_service.dart';
+import '../../../../profile/BL/controllers/profile_controller.dart';
 
 class OrderRepoImp extends OrderRepo {
   final FirebaseAuthService _firebaseAuthService;
+  final FireStoreService _firestoreService;
+  final CartController _cartcontroller;
+  final ProductController _productcontroller;
+  final ProfileController _profileController;
   OrderRepoImp(
     this._firebaseAuthService,
+    this._firestoreService,
+    this._cartcontroller,
+    this._productcontroller,
+    this._profileController,
   );
 
   @override
@@ -15,24 +31,30 @@ class OrderRepoImp extends OrderRepo {
         .map((documentSnapshot) => OrderModel.fromJson(
             documentSnapshot.data() as Map<String, dynamic>))
         .toList();
-    // for (var element in ordersSnapshot) {
-    //   orders.add(element.
-
-    //     OrderModel(
-    //     orderId: element.get('orderId'),
-    //     userId: element.get('userId'),
-    //     productId: element.get('productId'),
-    //     productTitle: element.get('productTitle'),
-    //     userName: element.get('userName'),
-    //     price: element.get('price').toString(),
-    //     totalPrice: element.get('totalPrice').toString(),
-    //     imageUrl: element.get('imageUrl'),
-    //     quantity: element.get('quantity').toString(),
-    //     orderDate:
-    //         element.get('orderDate'), // Convert Firestore Timestamp to DateTime
-    //   )
-    //   );
-    // }
     return orders;
+  }
+
+  @override
+  Future<void> addOrder() async {
+    // final user = await _firebaseAuthService.getCurrentUser();
+    final user = _profileController.userModel;
+    var cartList = _cartcontroller.cartItems;
+    final orderId = const Uuid().v4();
+    List<ProductModel> products = [];
+    cartList.forEach((key, value) async {
+      final getCurrProduct = _productcontroller.findByProdId(value.productId);
+      products.add(getCurrProduct!);
+    });
+    var order = OrderModel(
+      orderId: orderId,
+      userId: user.value!.userId,
+      userName: user.value!.userName,
+      orderStatus: OrderStatus.pending,
+      totalPrice: _cartcontroller.getTotal(productProvider: _productcontroller),
+      orderDate: Timestamp.now(),
+      products: products,
+    );
+
+    await _firestoreService.orderDB.doc(orderId).set(order.toJson());
   }
 }

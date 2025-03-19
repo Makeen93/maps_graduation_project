@@ -13,6 +13,8 @@ class AppRouter {
   static const String home = '/home';
   static const String productDetail = '/product_detail';
   static const String search = '/search';
+  static const String myOrders = '/myOrders';
+  static const String wishList = '/wishList';
   static List<GetPage> routes = [
     LoginPage(),
     RegisterPage(),

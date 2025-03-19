@@ -12,10 +12,22 @@ class ProductModel extends ProductEntity {
     required super.productQuantity,
     super.createdAt,
   });
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
+      productId: json['productId'],
+      productTitle: json['productTitle'],
+      productPrice: json['productPrice'],
+      productCategory: json['productCategory'],
+      productDescription: json['productDescription'],
+      productImage: json['productImage'],
+      productQuantity: json['productQuantity'],
+      createdAt: json['createdAt'],
+    );
+  }
   factory ProductModel.fromFireStore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
     return ProductModel(
-        productId: data['productId'], //doc.get('productId'),
+        productId: data['productId'],
         productTitle: data['productTitle'],
         productPrice: data['productPrice'],
         productCategory: data['productCategory'],
@@ -23,5 +35,17 @@ class ProductModel extends ProductEntity {
         productImage: data['productImage'],
         productQuantity: data['productQuantity'],
         createdAt: data['createdAt']);
+  }
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'productId': productId,
+      'productTitle': productTitle,
+      'productPrice': productPrice,
+      'productCategory': productCategory,
+      'productDescription': productDescription,
+      'productImage': productImage,
+      'productQuantity': productQuantity,
+      'createdAt': createdAt,
+    };
   }
 }
