@@ -32,29 +32,42 @@ class CartController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  void addProductToCart({required String productId}) {
+  Future<void> updateQuantity({ required String productId, required int quantity}) async {
     try {
       isLoading.value = true;
-      errorMessage.value = '';
-      cartItems.putIfAbsent(
-          productId,
-          () => CartModel(
-              cartId: const Uuid().v4(), productId: productId, quantity: 1));
-    } catch (error) {
-      errorMessage.value = error.toString();
+      await cartRepository.updateQuantity( productId, quantity);
+
+      if (cartItems.containsKey(productId)) {
+        cartItems[productId] = cartItems[productId]!.copyWith(quantity: quantity);
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to update quantity");
     } finally {
       isLoading.value = false;
     }
   }
+  // void addProductToCart({required String productId}) {
+  //   try {
+  //     isLoading.value = true;
+  //     errorMessage.value = '';
+  //     cartItems.putIfAbsent(
+  //         productId,
+  //         () => CartModel(
+  //             cartId: const Uuid().v4(), productId: productId, quantity: 1));
+  //   } catch (error) {
+  //     errorMessage.value = error.toString();
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
-  void updateQuantity({required String productId, required int quantity}) {
-    cartItems.update(
-        productId,
-        (item) => CartModel(
-            cartId: item.cartId, productId: productId, quantity: quantity));
-    // update();
-  }
+  // void updateQuantity({required String productId, required int quantity}) {
+  //   cartItems.update(
+  //       productId,
+  //       (item) => CartModel(
+  //           cartId: item.cartId, productId: productId, quantity: quantity));
+  //   // update();
+  // }
 
   Future<void> fetchCart() async {
     try {

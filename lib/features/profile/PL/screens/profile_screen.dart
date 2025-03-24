@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:maps_graduation_project/core/langs/locallization_controller.dart';
 import 'package:maps_graduation_project/core/services/firebase_auth_service.dart';
 import 'package:maps_graduation_project/core/services/my_app_method.dart';
 import 'package:maps_graduation_project/core/utils/convert_code_to_flag.dart';
@@ -14,15 +15,12 @@ import 'package:maps_graduation_project/features/profile/BL/controllers/profile_
 import 'package:maps_graduation_project/routes/app_routes.dart';
 
 import '../../../../core/services/assets_manager.dart';
-import '../../../../core/services/localization_service.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // var profileController = Get.find<ProfileController>();
-    print('${controller.userModel}');
     var user = Get.find<FirebaseAuthService>();
     var authController = Get.find<AuthController>();
     var themeController = Get.find<ThemeServiceController>();
@@ -43,61 +41,45 @@ class ProfileScreen extends GetView<ProfileController> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Visibility(
-                  visible: user == null ? true : false,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: TitlesTextWidget(
-                        label: 'Please login to have ultimate access'.tr),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                controller.userModel == null
-                    ? const SizedBox.shrink()
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context).cardColor,
-                                border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.surface,
-                                    width: 3),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    controller.userModel.value?.userImage ??
-                                        'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg',
-                                  ),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).cardColor,
+                          border: Border.all(
+                              color: Theme.of(context).colorScheme.surface,
+                              width: 3),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              controller.userModel.value?.userImage ??
+                                  'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg',
                             ),
-                            const SizedBox(
-                              width: 7,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TitlesTextWidget(
-                                    label:
-                                        controller.userModel.value?.userName ??
-                                            ''),
-                                SubtitleTextWidget(
-                                    label:
-                                        controller.userModel.value?.userEmail ??
-                                            ''),
-                              ],
-                            ),
-                          ],
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
+                      const SizedBox(
+                        width: 7,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TitlesTextWidget(
+                              label:
+                                  controller.userModel.value?.userName ?? ''),
+                          SubtitleTextWidget(
+                              label:
+                                  controller.userModel.value?.userEmail ?? ''),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
@@ -107,44 +89,23 @@ class ProfileScreen extends GetView<ProfileController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TitlesTextWidget(label: 'General'.tr),
-                      user == null
-                          ? const SizedBox.shrink()
-                          : CustomListTile(
-                              imagePath: AssetsManager.orderSvg,
-                              text: 'AllOrders'.tr,
-                              function: () async {
-                                // await Navigator.pushNamed(
-                                //   context,
-                                //   OrdersScreenFree.routeName,
-                                // );
-                              },
-                            ),
-                      user == null
-                          ? const SizedBox.shrink()
-                          : CustomListTile(
-                              imagePath: AssetsManager.wishlistSvg,
-                              text: 'Wishlist'.tr,
-                              function: () async {
-                                // await Navigator.pushNamed(
-                                //   context,
-                                //   WishlistScreen.routName,
-                                // );
-                              },
-                            ),
                       CustomListTile(
-                        imagePath: AssetsManager.recent,
-                        text: 'ViewedRecently'.tr,
+                        imagePath: AssetsManager.orderSvg,
+                        text: 'All Orders'.tr,
                         function: () async {
+                          Get.toNamed(AppRouter.myOrders);
                           // await Navigator.pushNamed(
                           //   context,
-                          //   ViewedRecentlyScreen.routName,
+                          //   OrdersScreenFree.routeName,
                           // );
                         },
                       ),
                       CustomListTile(
-                        imagePath: AssetsManager.address,
-                        text: 'Address'.tr,
-                        function: () {},
+                        imagePath: AssetsManager.wishlistSvg,
+                        text: 'Wishlist'.tr,
+                        function: () async {
+                          Get.toNamed(AppRouter.wishList);
+                        },
                       ),
                       const Divider(
                         thickness: 1,
@@ -174,22 +135,7 @@ class ProfileScreen extends GetView<ProfileController> {
                         imagePath: AssetsManager.langSvg,
                         text: 'Languages'.tr,
                         function: () async {
-                          // Get.bottomSheet(Container(
-                          //   height: 150,
-                          //   color: Colors.amberAccent,
-                          //   child: const Center(
-                          //       child: Text(
-                          //     'Count has reached }',
-                          //     style: TextStyle(
-                          //         fontSize: 28.0, color: Colors.white),
-                          //   )),
-                          // ));
                           showLanguageDialog();
-                          // Get.back();
-                          // await Navigator.pushNamed(
-                          //   context,
-                          //   WishlistScreen.routName,
-                          // );
                         },
                       ),
                       const Divider(
@@ -231,14 +177,14 @@ class ProfileScreen extends GetView<ProfileController> {
 }
 
 void showLanguageDialog() {
-  var localController = Get.find<LocalizationService>();
+  var localController = Get.find<LocallizationController>();
   Get.defaultDialog(
-    title: 'Select Language',
+    title: 'Select Language'.tr,
     content: Column(
       children: [
         ListTile(
           leading: Text("US".toFlag, style: const TextStyle(fontSize: 30)),
-          title: const Text('English'),
+          title: Text('English'.tr),
           onTap: () {
             localController.changeLocale('en');
             Get.back();
@@ -246,7 +192,7 @@ void showLanguageDialog() {
         ),
         ListTile(
           leading: Text("TR".toFlag, style: const TextStyle(fontSize: 30)),
-          title: const Text('Türkçe'),
+          title: Text('Turkish'.tr),
           onTap: () {
             localController.changeLocale('tr');
             Get.back();
@@ -254,7 +200,7 @@ void showLanguageDialog() {
         ),
         ListTile(
           leading: Text("SA".toFlag, style: const TextStyle(fontSize: 30)),
-          title: const Text('العربية'),
+          title: Text('Arabic'.tr),
           onTap: () {
             localController.changeLocale('ar');
             Get.back();
@@ -267,7 +213,7 @@ void showLanguageDialog() {
         onPressed: () {
           Get.back(); // Close the dialog
         },
-        child: const Text('Cancel'),
+        child: Text('Cancel'.tr),
       ),
     ],
   );
@@ -292,7 +238,9 @@ class CustomListTile extends StatelessWidget {
         height: 30,
       ),
       title: SubtitleTextWidget(label: text),
-      trailing: const Icon(IconlyLight.arrow_right_2),
+      trailing: Get.locale != const Locale('ar')
+          ? const Icon(IconlyLight.arrow_right_2)
+          : const Icon(IconlyLight.arrow_left_2),
     );
   }
 }

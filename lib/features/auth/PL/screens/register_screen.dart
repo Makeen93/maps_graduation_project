@@ -11,6 +11,7 @@ import 'package:maps_graduation_project/core/widgets/subtitle_text.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/auth/BL/controllers/register_controller.dart';
 
+import '../widgets/custom_text_form_field.dart';
 import '../widgets/pick_image_widget.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
@@ -18,14 +19,13 @@ class RegisterScreen extends GetView<RegisterController> {
   final userData = Get.put(FirebaseAuthService());
 
   var appMethods = Get.find<MyAppMethods>();
-
-  final FocusNode _nameFocusNode = FocusNode();
-  final FocusNode _emailFocusNode = FocusNode();
-  final FocusNode _passwordFocusNode = FocusNode();
-  final FocusNode _confirmPasswordFocusNode = FocusNode();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final RxBool obscureText1 = true.obs;
   final RxBool obscureText2 = true.obs;
-  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   RegisterScreen({super.key});
 
@@ -70,123 +70,72 @@ class RegisterScreen extends GetView<RegisterController> {
                     child: Obx(() {
                       return Column(
                         children: [
-                          TextFormField(
-                            controller: controller.nameController,
-                            focusNode: _nameFocusNode,
-                            textInputAction: TextInputAction.next,
+                          CustomTextFormField(
+                            labelText: 'User Name'.tr,
+                            hintText: 'Enter User Name..'.tr,
+                            prefixIcon: IconlyLight.profile,
+                            controller: nameController,
                             keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                              hintText: 'Full name'.tr,
-                              prefixIcon: const Icon(IconlyLight.profile),
-                            ),
                             validator: (value) {
                               return MyValidators.displayNamevalidator(value);
                             },
-                            onFieldSubmitted: (value) {
-                              FocusScope.of(context)
-                                  .requestFocus(_emailFocusNode);
-                            },
                           ),
                           const SizedBox(height: 16.0),
-                          TextFormField(
-                            controller: controller.emailController,
-                            focusNode: _emailFocusNode,
-                            textInputAction: TextInputAction.next,
+                          CustomTextFormField(
+                            labelText: 'Email Address'.tr,
+                            hintText: 'Enter Valid Email..'.tr,
+                            prefixIcon: IconlyLight.message,
+                            controller: emailController,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                              hintText: 'Email address'.tr,
-                              prefixIcon: const Icon(IconlyLight.message),
-                            ),
                             validator: (value) {
                               return MyValidators.emailValidator(value);
                             },
-                            onFieldSubmitted: (value) {
-                              FocusScope.of(context)
-                                  .requestFocus(_passwordFocusNode);
-                            },
                           ),
                           const SizedBox(height: 16.0),
-                          TextFormField(
-                            controller: controller.passwordController,
-                            focusNode: _passwordFocusNode,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.visiblePassword,
+                          CustomTextFormField(
+                            labelText: 'Enter Password'.tr,
+                            hintText: "*********",
+                            prefixIcon: Icons.lock,
                             obscureText: obscureText1.value,
-                            decoration: InputDecoration(
-                              hintText: '*********',
-                              prefixIcon: const Icon(IconlyLight.lock),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  obscureText1.value = !obscureText1.value;
-                                },
-                                icon: Icon(
-                                  obscureText1.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
+                            controller: passwordController,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                obscureText1.value = !obscureText1.value;
+                              },
+                              icon: Icon(
+                                obscureText1.value
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                               ),
                             ),
+                            keyboardType: TextInputType.visiblePassword,
                             validator: (value) {
                               return MyValidators.passwordValidator(value);
                             },
-                            onFieldSubmitted: (value) {
-                              FocusScope.of(context)
-                                  .requestFocus(_confirmPasswordFocusNode);
-                            },
                           ),
                           const SizedBox(height: 16.0),
-                          TextFormField(
-                            controller: controller.confirmPasswordController,
-                            focusNode: _confirmPasswordFocusNode,
-                            textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.visiblePassword,
+                          CustomTextFormField(
+                            labelText: 'Confirm Password'.tr,
+                            hintText: "*********",
+                            prefixIcon: Icons.lock,
                             obscureText: obscureText2.value,
-                            decoration: InputDecoration(
-                              hintText: '*********',
-                              prefixIcon: const Icon(IconlyLight.lock),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  obscureText2.value = !obscureText2.value;
-                                },
-                                icon: Icon(
-                                  obscureText2.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
+                            controller: confirmPasswordController,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                obscureText2.value = !obscureText2.value;
+                              },
+                              icon: Icon(
+                                obscureText2.value
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                               ),
                             ),
+                            keyboardType: TextInputType.visiblePassword,
                             validator: (value) {
                               return MyValidators.repeatPasswordValidator(
                                 value: value,
-                                password: controller.passwordController.text,
+                                password: passwordController.text,
                               );
-                            },
-                            onFieldSubmitted: (value) async {
-                              if (true) {
-                                if (controller.pickedImage.value == null) {
-                                  appMethods.showErrorOrWarningDialog(
-                                      subtitle:
-                                          'Make sure to pick up an image'.tr,
-                                      fct: () {});
-                                  return;
-                                }
-                                controller.registerUser(
-                                  email: controller.emailController.text.trim(),
-                                  name: controller.nameController.text.trim(),
-                                  // user: UserEntity(
-                                  //   userCart: [],
-                                  //   userWish: [],
-                                  //   userId: userData.userId ?? '',
-                                  //   userImage: storage.url ?? '',
-                                  //   createdAt: Timestamp.now(),
-                                  //   userEmail: _emailController.text.trim(),
-                                  //   userName: _nameController.text.trim(),
-                                  // ),
-                                  filePath: controller.pickedImage.value,
-                                  password:
-                                      controller.passwordController.text.trim(),
-                                );
-                              }
                             },
                           ),
                           const SizedBox(height: 25.0),
@@ -206,11 +155,10 @@ class RegisterScreen extends GetView<RegisterController> {
                               ),
                               onPressed: () async {
                                 controller.registerUser(
-                                  email: controller.emailController.text.trim(),
-                                  name: controller.nameController.text.trim(),
+                                  email: emailController.text.trim(),
+                                  name: nameController.text.trim(),
                                   filePath: controller.pickedImage.value,
-                                  password:
-                                      controller.passwordController.text.trim(),
+                                  password: passwordController.text.trim(),
                                 );
                               },
                             ),

@@ -25,13 +25,20 @@ class CartRepoImpl extends CartRepo {
       ]);
     }
   }
-  
 
   @override
   Future<void> clearCart() async {
     final user = await _firebaseAuthService.getCurrentUser();
     if (user != null) {
       await _fireStoreService.clearUserCart(user.uid);
+    }
+  }
+
+  @override
+  Future<void> updateQuantity(String productId, int newQuantity) async {
+    final user = await _firebaseAuthService.getCurrentUser();
+    if (user != null) {
+      await _fireStoreService.updateQuantity(user.uid, productId, newQuantity);
     }
   }
 
@@ -46,12 +53,12 @@ class CartRepoImpl extends CartRepo {
     }
     return [];
   }
-  
+
   @override
-  Future<void> removeOneFromUserCart( String productId) async{
+  Future<void> removeOneFromUserCart(String productId) async {
     final user = await _firebaseAuthService.getCurrentUser();
     if (user != null) {
-      await _fireStoreService.removeOneFromUserCart(user.uid,productId);
+      await _fireStoreService.removeOneFromUserCart(user.uid, productId);
     }
   }
 }

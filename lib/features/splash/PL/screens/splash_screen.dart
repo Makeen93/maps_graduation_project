@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:maps_graduation_project/core/services/firebase_auth_service.dart';
 import 'package:maps_graduation_project/features/splash/BL/controller/splash_controller.dart';
 

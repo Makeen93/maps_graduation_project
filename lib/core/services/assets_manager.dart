@@ -1,5 +1,6 @@
 class AssetsManager {
   static String imagesPath = "assets/images";
+  static String jsonPath = "assets/json";
   static String profileImagesPath = "assets/images/profile";
   static String bagImagesPath = "assets/images/bag";
   static String bannersImagesPath = "assets/images/banners";
@@ -45,4 +46,6 @@ class AssetsManager {
   static String cosmetics = "$categoriesImagesPath/cosmetics.png";
   static String shoes = "$categoriesImagesPath/shoes.png";
   static String pc = "$categoriesImagesPath/pc.png";
+  // json path
+  static String splash = "$jsonPath/splash.json";
 }

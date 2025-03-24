@@ -10,4 +10,6 @@ class CartEntity {
     required this.productId,
     required this.quantity,
   });
+
+  
 }

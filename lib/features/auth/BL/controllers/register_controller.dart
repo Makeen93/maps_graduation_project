@@ -14,11 +14,7 @@ class RegisterController extends GetxController {
   var myAppMethods = Get.find<MyAppMethods>();
   final RxBool isLoading = false.obs;
   final Rx<XFile?> pickedImage = Rx<XFile?>(null);
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+
 
   Future<void> registerUser(
       {required String email,

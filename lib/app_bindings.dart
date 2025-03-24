@@ -10,10 +10,8 @@ import 'package:maps_graduation_project/features/cart/DL/data/repos/cart_repo_im
 import 'package:maps_graduation_project/features/order/BL/controllers/order_controller.dart';
 import 'package:maps_graduation_project/features/order/DL/data/repos/order_repo_imp.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
-import 'package:maps_graduation_project/features/product/BL/controllers/viewed_product_controller.dart';
 import 'package:maps_graduation_project/features/wishList/BL/controllers/wishlist_controller.dart';
-import 'package:maps_graduation_project/features/product/DL/data/repos/viewed_product_repo_imp.dart';
-import 'package:maps_graduation_project/features/product/DL/data/repos/wishlist_repo_imp.dart';
+import 'package:maps_graduation_project/features/wishList/DL/data/repo/wishlist_repo_imp.dart';
 import 'package:maps_graduation_project/features/profile/BL/controllers/profile_controller.dart';
 import 'package:maps_graduation_project/features/profile/DL/data/repos/profile_repo_impl.dart';
 import 'package:maps_graduation_project/features/splash/BL/controller/splash_controller.dart';
@@ -32,11 +30,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(
       () => ProductController(productRepoImpl: Get.find()),
     );
-    Get.lazyPut(() => ViewedProductRepoImp(), fenix: true);
-    Get.lazyPut(
-        () => ViewedProductController(
-            viewedProductRepository: Get.find<ViewedProductRepoImp>()),
-        fenix: true);
     Get.lazyPut(() =>
         RegisterController(authRepository: Get.find<AuthRepositoryImp>()));
     Get.lazyPut(() => FirebaseAuthService(), fenix: true);
@@ -52,7 +45,6 @@ class AppBinding extends Bindings {
         auth: Get.find<FirebaseAuthService>(),
         firestoreService: Get.find<FireStoreService>(),
         storageService: Get.find<StorageService>()));
-    Get.lazyPut(() => ViewedProductRepoImp());
     Get.lazyPut(() => WishlistRepoImp(Get.find(), Get.find()));
     Get.lazyPut(() => WishlistController(wishlistRepository: Get.find()));
     Get.lazyPut(
@@ -70,9 +62,6 @@ class AppBinding extends Bindings {
             Get.find<ProfileController>()),
         fenix: true);
     Get.lazyPut(() => OrderController(Get.find<OrderRepoImp>()), fenix: true);
-    Get.lazyPut(
-        () => ViewedProductController(viewedProductRepository: Get.find()),
-        fenix: true);
     Get.lazyPut(() =>
         SplashController(firebaseAuthService: Get.find<FirebaseAuthService>()));
   }

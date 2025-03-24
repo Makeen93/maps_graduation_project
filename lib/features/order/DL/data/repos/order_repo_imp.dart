@@ -26,7 +26,10 @@ class OrderRepoImp extends OrderRepo {
 
   @override
   Future<List<OrderModel>> fetchOrders() async {
-    final ordersSnapshot = await _firebaseAuthService.fetchOrders();
+    final user = _profileController.userModel;
+    final ordersSnapshot =
+        await _firebaseAuthService.fetchOrders(user.value!.userId);
+    print('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM${ordersSnapshot.length}');
     List<OrderModel> orders = ordersSnapshot
         .map((documentSnapshot) => OrderModel.fromJson(
             documentSnapshot.data() as Map<String, dynamic>))
@@ -49,7 +52,7 @@ class OrderRepoImp extends OrderRepo {
       orderId: orderId,
       userId: user.value!.userId,
       userName: user.value!.userName,
-      orderStatus: OrderStatus.pending,
+      orderStatus: OrderStatus.Pending,
       totalPrice: _cartcontroller.getTotal(productProvider: _productcontroller),
       orderDate: Timestamp.now(),
       products: products,

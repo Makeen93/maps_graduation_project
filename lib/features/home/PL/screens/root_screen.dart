@@ -4,7 +4,7 @@ import 'package:iconly/iconly.dart';
 import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
 import 'package:maps_graduation_project/features/cart/PL/screens/cart_screen.dart';
 import 'package:maps_graduation_project/features/home/BL/controllers/root_controller.dart';
-import 'package:maps_graduation_project/features/home/PL/screens/search_screen.dart';
+import 'package:maps_graduation_project/features/product/PL/screens/search_screen.dart';
 import 'package:maps_graduation_project/features/home/PL/screens/home_screen.dart';
 import 'package:maps_graduation_project/features/profile/PL/screens/profile_screen.dart';
 
@@ -14,7 +14,7 @@ class RootScreen extends StatelessWidget {
 
   final List<Widget> pages = [
     const HomeScreen(),
-    const SearchScreen(),
+    SearchScreen(),
     const CartScreen(),
     const ProfileScreen(),
   ];

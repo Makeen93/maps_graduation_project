@@ -7,18 +7,14 @@ import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/auth/BL/controllers/auth_controller.dart';
 import 'package:maps_graduation_project/routes/app_routes.dart';
 
+import '../widgets/custom_text_form_field.dart';
 import '../widgets/google_btn.dart';
 
 class LoginScreen extends GetView<AuthController> {
-  // final AuthController _authController = Get.find();
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final FocusNode _emailFocusNode = FocusNode();
-  final FocusNode _passwordFocusNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RxBool obscureText = true.obs;
-
   LoginScreen({super.key});
 
   @override
@@ -45,33 +41,24 @@ class LoginScreen extends GetView<AuthController> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
+                    CustomTextFormField(
+                      labelText: 'Email address'.tr,
+                      hintText: 'Email address'.tr,
+                      prefixIcon: Icons.email,
                       controller: _emailController,
-                      focusNode: _emailFocusNode,
-                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: 'Email address'.tr,
-                        prefixIcon: const Icon(Icons.email),
-                      ),
                       validator: (value) {
                         return MyValidators.emailValidator(value);
-                      },
-                      onFieldSubmitted: (value) {
-                        FocusScope.of(context).requestFocus(_passwordFocusNode);
                       },
                     ),
                     const SizedBox(height: 16.0),
                     Obx(() {
-                      return TextFormField(
-                        controller: _passwordController,
-                        focusNode: _passwordFocusNode,
-                        textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: obscureText.value,
-                        decoration: InputDecoration(
+                      return CustomTextFormField(
+                          labelText: 'Enter Password'.tr,
                           hintText: "*********",
-                          prefixIcon: const Icon(Icons.lock),
+                          prefixIcon: Icons.lock,
+                          obscureText: obscureText.value,
+                          controller: _passwordController,
                           suffixIcon: IconButton(
                             onPressed: () {
                               obscureText.value = !obscureText.value;
@@ -82,19 +69,18 @@ class LoginScreen extends GetView<AuthController> {
                                   : Icons.visibility_off,
                             ),
                           ),
-                        ),
-                        validator: (value) {
-                          return MyValidators.passwordValidator(value);
-                        },
-                        onFieldSubmitted: (value) {
-                          if (_formKey.currentState!.validate()) {
-                            controller.login(
-                              _emailController.text.trim(),
-                              _passwordController.text.trim(),
-                            );
-                          }
-                        },
-                      );
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) {
+                            return MyValidators.passwordValidator(value);
+                          },
+                          onChanged: (value) {
+                            if (_formKey.currentState!.validate()) {
+                              controller.login(
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                              );
+                            }
+                          });
                     }),
                     const SizedBox(height: 16.0),
                     Align(
@@ -151,27 +137,6 @@ class LoginScreen extends GetView<AuthController> {
                                 height: kBottomNavigationBarHeight,
                                 child: FittedBox(
                                   child: GoogleButton(),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: SizedBox(
-                                height: kBottomNavigationBarHeight,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Guest'.tr,
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                  onPressed: () {
-                                    Get.offAllNamed('');
-                                  },
                                 ),
                               ),
                             ),

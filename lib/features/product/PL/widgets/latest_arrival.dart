@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:maps_graduation_project/core/services/my_app_method.dart';
 import 'package:maps_graduation_project/features/cart/BL/controllers/cart_controller.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
-import 'package:maps_graduation_project/features/product/BL/controllers/viewed_product_controller.dart';
 import 'package:maps_graduation_project/features/product/DL/data/models/product_model.dart';
 import 'package:maps_graduation_project/routes/app_routes.dart';
 import '../../../../core/widgets/subtitle_text.dart';
@@ -21,13 +20,12 @@ class LatestArrivalProductsWidget extends StatelessWidget {
     final cartController = Get.find<CartController>();
     final myAppMethods = Get.find<MyAppMethods>();
     var product = productController.findByProdId(productModel.productId);
-    final viewController = Get.find<ViewedProductController>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () async {
-          viewController.addProductToHistory(productModel.productId);
+          // viewController.addProductToHistory(productModel.productId);
           Get.toNamed(AppRouter.productDetail,
               arguments: productModel.productId);
         },
@@ -69,8 +67,8 @@ class LatestArrivalProductsWidget extends StatelessWidget {
                                     productId: product.productId)) {
                                   return;
                                 }
-                                cartController.addProductToCart(
-                                    productId: product.productId);
+                                // cartController.addProductToCart(
+                                //     productId: product.productId);
                                 try {
                                   await cartController.addToCart(
                                     productId: product.productId,

@@ -20,4 +20,15 @@ class CartModel extends CartEntity {
       quantity: map['quantity'] as int,
     );
   }
+  CartModel copyWith({
+    String? cartId,
+    String? productId,
+    int? quantity,
+  }) {
+    return CartModel(
+      cartId: cartId ?? this.cartId,
+      productId: productId ?? this.productId,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }

@@ -48,13 +48,13 @@ class GoogleButton extends StatelessWidget {
       }
     } on FirebaseAuthException catch (error, s) {
       await _methodsController.showErrorOrWarningDialog(
-          subtitle: '${'An_error_has_been_occured'.tr} ${error.message}',
+          subtitle: '${'An error has been occured'.tr} ${error.message}',
           fct: () {});
       print(error.message);
       print(s);
     } catch (error, s) {
       await _methodsController.showErrorOrWarningDialog(
-          subtitle: '${'An_error_has_been_occured'.tr} $error', fct: () {});
+          subtitle: '${'An error has been occured'.tr} $error', fct: () {});
       print(error);
     }
 
@@ -78,7 +78,7 @@ class GoogleButton extends StatelessWidget {
         color: Colors.red,
       ),
       label: Text(
-        'Sign in with google'.tr,
+        'Sign in by google'.tr,
         style: const TextStyle(
           fontSize: 16.0,
           color: Colors.black,

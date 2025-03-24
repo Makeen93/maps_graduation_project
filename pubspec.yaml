@@ -51,7 +51,7 @@ dependencies:
   dynamic_height_grid_view: ^0.0.4
   fancy_shimmer_image: ^2.0.3
   uuid: ^4.5.1
-  lingo_hunter: ^1.0.3
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +77,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/json/
     - assets/images/profile/
     - assets/images/bag/
     - assets/images/banners/
@@ -93,6 +94,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: LBC
+      fonts:
+        - asset: assets/fonts/lbc.otf
   # fonts:
   #   - family: Schyler
   #     fonts:

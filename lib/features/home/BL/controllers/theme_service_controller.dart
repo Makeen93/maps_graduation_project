@@ -10,7 +10,7 @@ class ThemeServiceController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadTheme(); // Load theme on initialization
+    _loadTheme();
   }
 
   void toggleTheme() {

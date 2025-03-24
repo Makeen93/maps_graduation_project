@@ -2,7 +2,6 @@
 import 'package:get/get.dart';
 
 import 'package:maps_graduation_project/features/auth/DL/data/models/user_model.dart';
-import 'package:maps_graduation_project/features/auth/DL/domain/entites/user_entity.dart';
 
 import '../../DL/data/repos/profile_repo_impl.dart';
 

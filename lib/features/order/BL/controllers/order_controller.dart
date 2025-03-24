@@ -21,7 +21,7 @@ class OrderController extends GetxController {
       isLoading = true.obs;
       errorMessage.value = '';
       final fetchedOrders = await _orderRepository.fetchOrders();
-      orders.assignAll(fetchedOrders); // Update the observable list
+      orders.assignAll(fetchedOrders); 
     } catch (error) {
       errorMessage.value = error.toString();
     } finally {
@@ -35,10 +35,10 @@ class OrderController extends GetxController {
       errorMessage.value = '';
       await _orderRepository.addOrder();
       CustomSnackbar.show(
-          title: 'Sucsecc',
-          message: 'Order has been requseted sucseccfully',
+          title: 'Sucsecc'.tr,
+          message: 'Order has been requseted sucseccfully'.tr,
           backgroundColor: Colors.green);
-      // await fetchCart();
+      await fetchOrders();
     } catch (error) {
       errorMessage.value = error.toString();
     } finally {

@@ -1,9 +1,7 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:maps_graduation_project/core/errors/exceptions.dart';
 import '../../features/auth/DL/data/models/user_model.dart';
 
@@ -105,27 +103,29 @@ class FirebaseAuthService {
     return _auth.currentUser != null;
   }
 
-  Future<User> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  // Future<User> signInWithGoogle() async {
+  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+  //   final GoogleSignInAuthentication? googleAuth =
+  //       await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+  //   // Create a new credential
+  //   final credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth?.accessToken,
+  //     idToken: googleAuth?.idToken,
+  //   );
 
-    // Once signed in, return the UserCredential
-    return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
-  }
+  //   // Once signed in, return the UserCredential
+  //   return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
+  // }
 
-  Future<List<QueryDocumentSnapshot>> fetchOrders() async {
+  Future<List<QueryDocumentSnapshot>> fetchOrders(String Id) async {
     final user = await getCurrentUser();
     if (user != null) {
-      final ordersSnapshot =
-          await FirebaseFirestore.instance.collection('orders').get();
+      final ordersSnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('userId', isEqualTo: Id)
+          .get();
       return ordersSnapshot.docs;
     }
     return [];

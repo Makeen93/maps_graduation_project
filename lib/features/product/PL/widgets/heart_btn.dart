@@ -19,25 +19,25 @@ class HeartButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final wishlistController = Get.find<WishlistController>();
     final methods = Get.find<MyAppMethods>();
-    // final productProvider = Provider.of<ProductProvider>(context);
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color,
-      ),
-      child: Obx(() => IconButton(
+    return Obx(() {
+      bool isInWishlist = wishlistController.wishlistItems
+          .any((item) => item.productId == productId);
+      return CircleAvatar(
+        backgroundColor: Colors.white,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+          ),
+          child: IconButton(
             style: IconButton.styleFrom(
               shape: const CircleBorder(),
             ),
             onPressed: () async {
               try {
-                if (wishlistController.wishlistItems
-                    .any((item) => item.productId == productId)) {
+                if (isInWishlist) {
                   // Remove item from wishlist
-                  final itemToRemove = wishlistController.wishlistItems
-                      .firstWhere((item) => item.productId == productId);
-                  await wishlistController.removeItem(
-                      itemToRemove.id, productId);
+                  await wishlistController.removeFromWishlist(productId);
                 } else {
                   // Add item to wishlist
                   await wishlistController.addToWishlist(productId);
@@ -63,7 +63,9 @@ class HeartButtonWidget extends StatelessWidget {
                         ? Colors.red
                         : Colors.grey,
                   ),
-          )),
-    );
+          ),
+        ),
+      );
+    });
   }
 }

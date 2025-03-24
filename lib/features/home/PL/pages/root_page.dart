@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:maps_graduation_project/app_bindings.dart';
-import 'package:maps_graduation_project/root_screen.dart';
+import 'package:maps_graduation_project/features/home/PL/screens/root_screen.dart';
 
 import '../../../../routes/app_routes.dart';
 

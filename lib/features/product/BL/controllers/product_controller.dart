@@ -14,22 +14,40 @@ class ProductController extends GetxController {
   });
   var products = <ProductModel>[].obs;
   var newProducts = <ProductModel>[].obs;
-  // var viewedProductItems = <String, ViewedProductModel>{}.obs;
   var productListSearch = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
+  RxString searchQueryText = ''.obs;
   final TextEditingController searchTextController = TextEditingController();
   @override
   void onInit() async {
     super.onInit();
     await fetchProducts();
+    debounce(searchQueryText, (val) {
+      productListSearch.value = searchQuery(
+        searchtext: val,
+        passedList: newProducts,
+      );
+    }, time: const Duration(milliseconds: 500));
   }
 
   @override
   void onClose() {
-    // Dispose of the TextEditingController when the controller is removed
-    searchTextController.dispose();
     super.onClose();
+    searchTextController.dispose();
+  }
+
+  void searchProducts() {
+    if (searchTextController.text.isEmpty) {
+      productListSearch.clear();
+      return;
+    }
+    productListSearch.assignAll(
+      searchQuery(
+        searchtext: searchTextController.text,
+        passedList: newProducts,
+      ),
+    );
   }
 
   ProductModel? findByProdId(String productId) {
@@ -51,38 +69,21 @@ class ProductController extends GetxController {
   }
 
   List<ProductModel> findByCategory({required String ctgName}) {
-    List<ProductModel> ctgList = products
+    return products
         .where((element) => element.productCategory
             .toLowerCase()
             .contains(ctgName.toLowerCase()))
         .toList();
-
-    return ctgList;
   }
 
-  // Stream<List<ProductModel>> fetchProductStream() {
-  //   try {
-  //     return productRepoImpl.getdoc.snapshots().map((snapshot) {
-  //       products.clear();
-  //       // products = [];
-  //       for (var element in snapshot.docs) {
-  //         products.insert(0, ProductModel.fromFireStore(element));
-  //       }
-  //       return products;
-  //     });
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
-
-  Future<List<ProductModel>> fetchProducts() async {
+  Future<void> fetchProducts() async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
 
-      final fetchedPosts = await productRepoImpl.fetchProducts();
-      products.value = fetchedPosts;
-      return products;
+      final fetchedProducts = await productRepoImpl.fetchProducts();
+      products.value = fetchedProducts;
+      newProducts.value = fetchedProducts;
     } catch (e, s) {
       errorMessage.value = e.toString();
       CustomSnackbar.show(message: '$e', title: 'Erorr');

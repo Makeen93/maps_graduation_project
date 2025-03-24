@@ -22,11 +22,8 @@ class ProfileRepoImpl extends ProfileRepo {
       }
       var uid = user.uid;
       var x = await firestore.getUser(uid);
-      print('****************-------------------------------$x');
       return x;
     } on Exception catch (e, s) {
-      print(e);
-      print(s);
       throw Exception(e);
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:maps_graduation_project/features/home/PL/screens/search_screen.dart';
+import 'package:maps_graduation_project/features/product/PL/screens/search_screen.dart';
 
 import '../../../../core/widgets/subtitle_text.dart';
 
@@ -16,8 +16,7 @@ class CategoryRoundedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const SearchScreen(), arguments: name);
-        // Navigator.pushNamed(context, SearchScreen.routeName, arguments: name);
+        Get.to(() => SearchScreen(), arguments: name);
       },
       child: SingleChildScrollView(
         child: Column(

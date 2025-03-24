@@ -13,7 +13,6 @@ import 'package:maps_graduation_project/features/product/PL/widgets/heart_btn.da
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({
     super.key,
-    // this.productId,
   });
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,7 @@ class ProductDetailsScreen extends StatelessWidget {
               centerTitle: true,
               leading: IconButton(
                   onPressed: () {
-                    Navigator.canPop(context) ? Navigator.pop(context) : null;
+                    Get.back();
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios,

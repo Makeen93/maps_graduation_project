@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:maps_graduation_project/core/widgets/app_name_text.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
-import 'package:maps_graduation_project/features/product/BL/controllers/viewed_product_controller.dart';
 import 'package:maps_graduation_project/features/product/PL/widgets/ctg_rounded_widget.dart';
 import 'package:maps_graduation_project/features/product/PL/widgets/latest_arrival.dart';
 
@@ -17,7 +16,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var productController = Get.find<ProductController>();
-    var lastArrivalController = Get.find<ViewedProductController>();
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -87,9 +85,6 @@ class HomeScreen extends StatelessWidget {
                           return LatestArrivalProductsWidget(
                               productModel: productlItem);
 
-                          // return ChangeNotifierProvider.value(
-                          //     value: controller.products[index],
-                          //     child: const LatestArrivalProductsWidget());
                         }),
                   ),
                 );

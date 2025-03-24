@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:maps_graduation_project/core/services/database_service.dart';
 import 'package:maps_graduation_project/features/auth/DL/data/models/user_model.dart';
@@ -9,7 +8,53 @@ class FireStoreService implements DatabaseService {
   final usersDb = FirebaseFirestore.instance.collection('users');
   final productDB = FirebaseFirestore.instance.collection('products');
   final orderDB = FirebaseFirestore.instance.collection('orders');
-  // late final doc;
+
+  Future<void> updateUserCart(
+      String uid, List<Map<String, dynamic>> cartItems) async {
+    await usersDb.doc(uid).update({
+      'userCart': FieldValue.arrayUnion(cartItems),
+    });
+  }
+  Future<void> updateQuantity(String uid, String productId, int newQuantity) async {
+    final userDoc = await usersDb.doc(uid).get();
+    if (userDoc.exists) {
+      final userData = userDoc.data();
+
+      if (userData != null && userData['userCart'] is List) {
+        List<dynamic> userCart = List.from(userData['userCart']);
+
+        for (var item in userCart) {
+          if (item['productId'] == productId) {
+            item['quantity'] = newQuantity;
+            break;
+          }
+        }
+
+        await usersDb.doc(uid).update({"userCart": userCart});
+      }
+    }
+  }
+  Future<void> clearUserCart(String uid) async {
+    await usersDb.doc(uid).update({"userCart": []});
+  }
+
+  Future<void> removeOneFromUserCart(String uid, String productId) async {
+    final userDoc = await usersDb.doc(uid).get();
+    if (userDoc.exists) {
+      final userData = userDoc.data();
+
+      if (userData != null && userData['userCart'] is List) {
+        List<dynamic> userCart = List.from(userData['userCart']);
+        userCart.removeWhere((item) => item['productId'] == productId);
+        await usersDb.doc(uid).update({"userCart": userCart});
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>?> getUserCart(String uid) async {
+    final userDoc = await usersDb.doc(uid).get();
+    return userDoc.data();
+  }
 
   Future<UserModel> getUser(String userId) async {
     try {
@@ -44,53 +89,18 @@ class FireStoreService implements DatabaseService {
     }
   }
 
-  Stream<List<ProductModel>> fetchProductStream() {
-    try {
-      List<ProductModel> productsList = [];
-      return productDB.snapshots().map((snapshot) {
-        productsList.clear();
-        for (var element in snapshot.docs) {
-          productsList.insert(0, ProductModel.fromFireStore(element));
-        }
-        return productsList;
-      });
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> updateUserCart(
-      String uid, List<Map<String, dynamic>> cartItems) async {
-    await usersDb.doc(uid).update({
-      'userCart': FieldValue.arrayUnion(cartItems),
-    });
-  }
-
-  Future<void> clearUserCart(String uid) async {
-    await usersDb.doc(uid).update({"userCart": []});
-  }
-
-  Future<void> removeOneFromUserCart(String uid, String productId) async {
+  Future<void> removeFromWishlist(String uid, String productId) async {
     final userDoc = await usersDb.doc(uid).get();
     if (userDoc.exists) {
       final userData = userDoc.data();
 
-      // Step 2: Get the current userCart array
-      if (userData != null && userData['userCart'] is List) {
-        List<dynamic> userCart = List.from(userData['userCart']);
+      if (userData != null) {
+        List<dynamic> wishList = userData['userWish'] ?? [];
+        wishList.removeWhere((item) => item['productId'] == productId);
 
-        // Step 3: Remove the product with the given productId
-        userCart.removeWhere((item) => item['productId'] == productId);
-
-        // Step 4: Update the userCart in Firestore
-        await usersDb.doc(uid).update({"userCart": userCart});
+        await usersDb.doc(uid).update({'userWish': wishList});
       }
     }
-  }
-
-  Future<Map<String, dynamic>?> getUserCart(String uid) async {
-    final userDoc = await usersDb.doc(uid).get();
-    return userDoc.data();
   }
 
   Future<void> updateUserWishlist(
@@ -107,6 +117,23 @@ class FireStoreService implements DatabaseService {
   Future<Map<String, dynamic>?> getUserWishlist(String uid) async {
     final userDoc = await usersDb.doc(uid).get();
     return userDoc.data();
+  }
+
+  Future<void> removeUserWishlistItem(
+      String uid, String wishlistId, String productId) async {
+    try {
+      final userDoc = await usersDb.doc(uid).get();
+      if (userDoc.exists) {
+        var wishlistItems = userDoc['wishlist'] as List<dynamic>;
+        wishlistItems = wishlistItems
+            .where((item) => item['productId'] != productId)
+            .toList();
+
+        await usersDb.doc(uid).update({'wishlist': wishlistItems});
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override

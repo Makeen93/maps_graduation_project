@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:maps_graduation_project/features/product/DL/data/models/wishlist_model.dart';
-import 'package:maps_graduation_project/features/product/DL/data/repos/wishlist_repo_imp.dart';
+import 'package:maps_graduation_project/features/wishList/DL/data/models/wishlist_model.dart';
+import 'package:maps_graduation_project/features/wishList/DL/data/repo/wishlist_repo_imp.dart';
 
 class WishlistController extends GetxController {
   final WishlistRepoImp wishlistRepository;
@@ -10,6 +10,12 @@ class WishlistController extends GetxController {
   WishlistController({required this.wishlistRepository});
   bool isProductInWishlist({required String productId}) {
     return wishlistItems.contains(productId);
+  }
+
+  @override
+  void onInit() {
+    fetchWishlist();
+    super.onInit();
   }
 
   Future<void> addToWishlist(String productId) async {
@@ -22,10 +28,24 @@ class WishlistController extends GetxController {
     }
   }
 
+  Future<void> removeFromWishlist(String productId) async {
+    final user = await wishlistRepository.getCurrentUser();
+    try {
+      isLoading.value = true;
+      await wishlistRepository.removeFromWishlist(user!.uid, productId);
+      await fetchWishlist();
+    } catch (e) {
+      Get.snackbar("Error", "Failed to remove from wishlist");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchWishlist() async {
     isLoading.value = true;
     try {
       final items = await wishlistRepository.fetchWishlist();
+
       wishlistItems.assignAll(items);
     } finally {
       isLoading.value = false;
@@ -47,6 +67,7 @@ class WishlistController extends GetxController {
     isLoading.value = true; // Set loading to true
     try {
       await wishlistRepository.removeItemFromWishlist(wishlistId, productId);
+      // wishlistItems.removeWhere((item) => item.productId == productId);
       await fetchWishlist();
     } finally {
       isLoading.value = false; // Set loading to false

@@ -2,10 +2,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:maps_graduation_project/core/services/firebase_auth_service.dart';
 import 'package:maps_graduation_project/core/services/firestore_service.dart';
-import 'package:maps_graduation_project/features/product/DL/data/models/wishlist_model.dart';
+import 'package:maps_graduation_project/features/wishList/DL/data/models/wishlist_model.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../domain/repos/wishlist_repo.dart';
+import '../../domain/repo/wishlist_repo.dart';
 
 class WishlistRepoImp extends WishlistRepo {
   final FireStoreService _fireStoreService;
@@ -25,6 +25,20 @@ class WishlistRepoImp extends WishlistRepo {
           'productId': productId,
         },
       ]);
+    }
+  }
+
+  @override
+  Future<void> removeFromWishlist(String userId, String productId) async {
+    await _fireStoreService.removeFromWishlist(userId, productId);
+  }
+
+  Future<void> removeItemFromWishlist(
+      String wishlistId, String productId) async {
+    final user = await _firebaseAuthService.getCurrentUser();
+    if (user != null) {
+      await _fireStoreService.removeUserWishlistItem(
+          user.uid, wishlistId, productId);
     }
   }
 
@@ -54,18 +68,5 @@ class WishlistRepoImp extends WishlistRepo {
   @override
   Future<void> clearWishlist(String uid) async {
     await _fireStoreService.clearUserWishlist(uid);
-  }
-
-  Future<void> removeItemFromWishlist(
-      String wishlistId, String productId) async {
-    final user = await _firebaseAuthService.getCurrentUser();
-    if (user != null) {
-      await _fireStoreService.updateUserWishlist(user.uid, [
-        {
-          "wishlistId": wishlistId,
-          'productId': productId,
-        },
-      ]);
-    }
   }
 }
