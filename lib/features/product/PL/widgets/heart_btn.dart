@@ -20,8 +20,8 @@ class HeartButtonWidget extends StatelessWidget {
     final wishlistController = Get.find<WishlistController>();
     final methods = Get.find<MyAppMethods>();
     return Obx(() {
-      bool isInWishlist = wishlistController.wishlistItems
-          .any((item) => item.productId == productId);
+      bool isInWishlist =
+          wishlistController.isProductInWishlist(productId: productId);
       return CircleAvatar(
         backgroundColor: Colors.white,
         child: Container(
@@ -36,32 +36,21 @@ class HeartButtonWidget extends StatelessWidget {
             onPressed: () async {
               try {
                 if (isInWishlist) {
-                  // Remove item from wishlist
                   await wishlistController.removeFromWishlist(productId);
                 } else {
-                  // Add item to wishlist
                   await wishlistController.addToWishlist(productId);
                 }
               } catch (e) {
                 methods.showErrorOrWarningDialog(
                     subtitle: e.toString(), fct: () {});
-              } finally {
-                // Stop loading
-                wishlistController.isLoading.value = false;
               }
             },
             icon: wishlistController.isLoading.value
                 ? const CircularProgressIndicator()
                 : Icon(
-                    wishlistController.wishlistItems
-                            .any((item) => item.productId == productId)
-                        ? IconlyBold.heart
-                        : IconlyLight.heart,
+                    isInWishlist ? IconlyBold.heart : IconlyLight.heart,
                     size: size,
-                    color: wishlistController.wishlistItems
-                            .any((item) => item.productId == productId)
-                        ? Colors.red
-                        : Colors.grey,
+                    color: isInWishlist ? Colors.red : Colors.grey,
                   ),
           ),
         ),

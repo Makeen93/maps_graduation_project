@@ -2,17 +2,17 @@
 import '../../domain/entities/wishlist_product_entitiy.dart';
 
 class WishlistModel extends WishlistProductEntitiy {
-  WishlistModel({required super.id, required super.productId});
+  WishlistModel({required super.wishlistId, required super.productId});
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'id': id,
+      'wishlistId': wishlistId,
       'productId': productId,
     };
   }
 
   factory WishlistModel.fromJson(Map<String, dynamic> map) {
     return WishlistModel(
-      id: map['id'] as String,
+      wishlistId: map['wishlistId'] as String,
       productId: map['productId'] as String,
     );
   }

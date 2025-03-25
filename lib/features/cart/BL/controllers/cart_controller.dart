@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
+import 'package:maps_graduation_project/core/widgets/custom_snackbar.dart';
 import 'package:maps_graduation_project/features/cart/DL/data/repos/cart_repo_impl.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
 import 'package:maps_graduation_project/features/product/DL/data/models/product_model.dart';
-import 'package:uuid/uuid.dart';
-
 import '../../DL/data/models/cart_model.dart';
 
 class CartController extends GetxController {
@@ -11,7 +10,7 @@ class CartController extends GetxController {
 
   var cartItems = <String, CartModel>{}.obs;
   var isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
+
   CartController({required this.cartRepository});
 
   @override
@@ -23,22 +22,25 @@ class CartController extends GetxController {
   Future<void> addToCart({required String productId, required int qty}) async {
     try {
       isLoading.value = true;
-      errorMessage.value = '';
+
       await cartRepository.addToCart(productId, qty);
       await fetchCart();
     } catch (error) {
-      errorMessage.value = error.toString();
+      CustomSnackbar.show(title: 'Error'.tr, message: error.toString());
     } finally {
       isLoading.value = false;
     }
   }
-  Future<void> updateQuantity({ required String productId, required int quantity}) async {
+
+  Future<void> updateQuantity(
+      {required String productId, required int quantity}) async {
     try {
       isLoading.value = true;
-      await cartRepository.updateQuantity( productId, quantity);
+      await cartRepository.updateQuantity(productId, quantity);
 
       if (cartItems.containsKey(productId)) {
-        cartItems[productId] = cartItems[productId]!.copyWith(quantity: quantity);
+        cartItems[productId] =
+            cartItems[productId]!.copyWith(quantity: quantity);
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to update quantity");
@@ -46,33 +48,11 @@ class CartController extends GetxController {
       isLoading.value = false;
     }
   }
-  // void addProductToCart({required String productId}) {
-  //   try {
-  //     isLoading.value = true;
-  //     errorMessage.value = '';
-  //     cartItems.putIfAbsent(
-  //         productId,
-  //         () => CartModel(
-  //             cartId: const Uuid().v4(), productId: productId, quantity: 1));
-  //   } catch (error) {
-  //     errorMessage.value = error.toString();
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
-  // void updateQuantity({required String productId, required int quantity}) {
-  //   cartItems.update(
-  //       productId,
-  //       (item) => CartModel(
-  //           cartId: item.cartId, productId: productId, quantity: quantity));
-  //   // update();
-  // }
 
   Future<void> fetchCart() async {
     try {
       isLoading.value = true;
-      errorMessage.value = '';
+
       final items = await cartRepository.fetchCart();
       cartItems.clear();
       // items.map((cart) => CartModel.fromJson(cart)).toList();
@@ -85,7 +65,7 @@ class CartController extends GetxController {
         );
       }
     } catch (error) {
-      errorMessage.value = error.toString();
+      CustomSnackbar.show(title: 'Error'.tr, message: error.toString());
     } finally {
       isLoading.value = false;
     }
@@ -121,11 +101,11 @@ class CartController extends GetxController {
   removeOneItem({required String productId}) async {
     try {
       isLoading.value = true;
-      errorMessage.value = '';
+
       await cartRepository.removeOneFromUserCart(productId);
       cartItems.remove(productId);
     } catch (error) {
-      errorMessage.value = error.toString();
+      CustomSnackbar.show(title: 'Error'.tr, message: error.toString());
     } finally {
       isLoading.value = false;
     }

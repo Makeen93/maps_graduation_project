@@ -2,7 +2,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:maps_graduation_project/core/services/firebase_auth_service.dart';
 import 'package:maps_graduation_project/core/services/firestore_service.dart';
-import 'package:maps_graduation_project/features/wishList/DL/data/models/wishlist_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/repo/wishlist_repo.dart';
@@ -29,16 +28,18 @@ class WishlistRepoImp extends WishlistRepo {
   }
 
   @override
-  Future<void> removeFromWishlist(String userId, String productId) async {
-    await _fireStoreService.removeFromWishlist(userId, productId);
+  Future<void> removeFromWishlist(String productId) async {
+    final user = await _firebaseAuthService.getCurrentUser();
+    if (user != null) {
+      await _fireStoreService.removeFromWishlist(user.uid, productId);
+    }
   }
 
   Future<void> removeItemFromWishlist(
       String wishlistId, String productId) async {
     final user = await _firebaseAuthService.getCurrentUser();
     if (user != null) {
-      await _fireStoreService.removeUserWishlistItem(
-          user.uid, wishlistId, productId);
+      await _fireStoreService.removeUserWishlistItem(user.uid, productId);
     }
   }
 
@@ -47,20 +48,23 @@ class WishlistRepoImp extends WishlistRepo {
   }
 
   @override
-  Future<List<WishlistModel>> fetchWishlist() async {
+  Future<List<Map<String, dynamic>>> fetchWishlist() async {
     final user = await _firebaseAuthService.getCurrentUser();
     if (user != null) {
       final data = await _fireStoreService.getUserWishlist(user.uid);
-      List<WishlistModel> wishlistItems = [];
-      if (data != null && data.containsKey("userWish")) {
-        for (var item in data['userWish']) {
-          wishlistItems.add(WishlistModel(
-            id: item['wishlistId'],
-            productId: item['productId'],
-          ));
-        }
+      if (data?['userWish'] != null && data!['userWish'] is List) {
+        return (data['userWish'] as List).cast<Map<String, dynamic>>();
       }
-      return wishlistItems;
+      // List<WishlistModel> wishlistItems = [];
+      // if (data != null && data.containsKey("userWish")) {
+      //   for (var item in data['userWish']) {
+      //     wishlistItems.add(WishlistModel(
+      //       id: item['wishlistId'],
+      //       productId: item['productId'],
+      //     ));
+      //   }
+      // }
+      // return wishlistItems;
     }
     return [];
   }

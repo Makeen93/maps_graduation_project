@@ -16,7 +16,6 @@ class ProductController extends GetxController {
   var newProducts = <ProductModel>[].obs;
   var productListSearch = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
   RxString searchQueryText = ''.obs;
   final TextEditingController searchTextController = TextEditingController();
   @override
@@ -79,15 +78,12 @@ class ProductController extends GetxController {
   Future<void> fetchProducts() async {
     try {
       isLoading.value = true;
-      errorMessage.value = '';
 
       final fetchedProducts = await productRepoImpl.fetchProducts();
       products.value = fetchedProducts;
       newProducts.value = fetchedProducts;
-    } catch (e, s) {
-      errorMessage.value = e.toString();
-      CustomSnackbar.show(message: '$e', title: 'Erorr');
-      throw Exception();
+    } catch (error) {
+      CustomSnackbar.show(title: 'Error'.tr, message: error.toString());
     } finally {
       isLoading.value = false;
     }

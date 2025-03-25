@@ -67,15 +67,12 @@ class LatestArrivalProductsWidget extends StatelessWidget {
                                     productId: product.productId)) {
                                   return;
                                 }
-                                // cartController.addProductToCart(
-                                //     productId: product.productId);
                                 try {
                                   await cartController.addToCart(
                                     productId: product.productId,
                                     qty: 1,
                                   );
                                 } catch (error) {
-                                  // ignore: use_build_context_synchronously
                                   myAppMethods.showErrorOrWarningDialog(
                                       subtitle: error.toString(), fct: () {});
                                 }

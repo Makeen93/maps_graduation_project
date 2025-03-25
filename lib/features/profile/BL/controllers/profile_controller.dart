@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:get/get.dart';
+import 'package:maps_graduation_project/core/widgets/custom_snackbar.dart';
 
 import 'package:maps_graduation_project/features/auth/DL/data/models/user_model.dart';
 
@@ -12,7 +13,6 @@ class ProfileController extends GetxController {
   });
 
   final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
   var userModel = Rx<UserModel?>(null);
 
   // Getter for userModel
@@ -25,12 +25,12 @@ class ProfileController extends GetxController {
   fetchUserInfo() async {
     try {
       isLoading.value = true;
-      errorMessage.value = '';
+
       final user = await profileRepoImpl.fetchUserInfo();
       print(user!.userEmail);
       userModel.value = user;
     } catch (error) {
-      errorMessage.value = error.toString();
+      CustomSnackbar.show(title: 'Error'.tr, message: error.toString());
     } finally {
       isLoading.value = false;
     }

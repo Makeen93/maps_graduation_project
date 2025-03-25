@@ -21,7 +21,6 @@ class ProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var productController = Get.find<ProductController>();
-    // var viewedProductController = Get.find<ViewedProductController>();
     var cartController = Get.find<CartController>();
     var methods = Get.find<MyAppMethods>();
     Size size = MediaQuery.of(context).size;
@@ -33,7 +32,6 @@ class ProductWidget extends StatelessWidget {
               elevation: 5,
               child: GestureDetector(
                 onTap: () async {
-                  // viewedProductController.addProductToHistory(productId);
                   Get.toNamed(AppRouter.productDetail, arguments: productId);
                 },
                 child: SingleChildScrollView(
@@ -109,10 +107,7 @@ class ProductWidget extends StatelessWidget {
                                               .productId)) {
                                         return;
                                       }
-                                      // cartController.addProductToCart(
-                                      //     productId: productController
-                                      //         .findByProdId(productId)!
-                                      //         .productId);
+
                                       try {
                                         await cartController.addToCart(
                                           productId: productController

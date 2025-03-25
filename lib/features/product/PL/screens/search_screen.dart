@@ -66,21 +66,7 @@ class SearchScreen extends StatelessWidget {
                                 onChanged: (value) {
                                   productController.searchQueryText.value =
                                       value;
-                                  // productController.productListSearch.value =
-                                  //     productController.searchQuery(
-                                  //         searchtext: productController
-                                  //             .searchTextController.text,
-                                  //         passedList:
-                                  //             productController.newProducts);
                                 },
-                                // onSubmitted: (value) {
-                                //   productController.productListSearch.value =
-                                //       productController.searchQuery(
-                                //           searchtext: productController
-                                //               .searchTextController.text,
-                                //           passedList:
-                                //               productController.newProducts);
-                                // },
                               ),
                               const SizedBox(
                                 height: 15.0,
@@ -111,6 +97,7 @@ class SearchScreen extends StatelessWidget {
                                         ? productController
                                             .productListSearch[index]
                                         : productController.newProducts[index];
+                                    print('-------------${product.productId}');
                                     return ProductWidget(
                                         productId: product.productId);
                                   }),

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:maps_graduation_project/core/widgets/custom_snackbar.dart';
@@ -15,7 +14,6 @@ class RegisterController extends GetxController {
   final RxBool isLoading = false.obs;
   final Rx<XFile?> pickedImage = Rx<XFile?>(null);
 
-
   Future<void> registerUser(
       {required String email,
       required String name,
@@ -29,7 +27,7 @@ class RegisterController extends GetxController {
           title: 'Success'.tr, message: 'User registered successfully'.tr);
       Get.offAllNamed(AppRouter.login);
     } catch (e) {
-      Get.snackbar('Error'.tr, e.toString());
+      CustomSnackbar.show(title: 'Error'.tr, message: e.toString());
     } finally {
       isLoading.value = false;
     }

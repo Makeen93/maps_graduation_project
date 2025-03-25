@@ -19,7 +19,6 @@ class TitlesTextWidget extends StatelessWidget {
       textAlign: TextAlign.center,
       label,
       maxLines: maxLines,
-      // textAlign: TextAlign.justify,
       style: TextStyle(
           color: color,
           fontSize: fontSize,

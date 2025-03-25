@@ -1,54 +1,63 @@
 import 'package:get/get.dart';
+import 'package:maps_graduation_project/core/widgets/custom_snackbar.dart';
 import 'package:maps_graduation_project/features/wishList/DL/data/models/wishlist_model.dart';
 import 'package:maps_graduation_project/features/wishList/DL/data/repo/wishlist_repo_imp.dart';
 
 class WishlistController extends GetxController {
   final WishlistRepoImp wishlistRepository;
 
-  var wishlistItems = <WishlistModel>[].obs;
+  var wishlistItems = <String, WishlistModel>{}.obs;
   var isLoading = false.obs;
   WishlistController({required this.wishlistRepository});
+
   bool isProductInWishlist({required String productId}) {
-    return wishlistItems.contains(productId);
+    return wishlistItems.containsKey(productId);
   }
 
   @override
   void onInit() {
-    fetchWishlist();
     super.onInit();
+    fetchWishlist();
   }
 
   Future<void> addToWishlist(String productId) async {
-    isLoading.value = true;
     try {
+      // isLoading.value = true;
       await wishlistRepository.addToWishlist(productId);
       await fetchWishlist();
+    } catch (error) {
+      CustomSnackbar.show(title: 'Error'.tr, message: error.toString());
     } finally {
-      isLoading.value = false;
+      // isLoading.value = false;
     }
   }
 
   Future<void> removeFromWishlist(String productId) async {
-    final user = await wishlistRepository.getCurrentUser();
     try {
-      isLoading.value = true;
-      await wishlistRepository.removeFromWishlist(user!.uid, productId);
-      await fetchWishlist();
+      // isLoading.value = true;
+
+      await wishlistRepository.removeFromWishlist(productId);
+      wishlistItems.remove(productId);
     } catch (e) {
       Get.snackbar("Error", "Failed to remove from wishlist");
     } finally {
-      isLoading.value = false;
+      // isLoading.value = false;
     }
   }
 
   Future<void> fetchWishlist() async {
-    isLoading.value = true;
+    // isLoading.value = true;
     try {
       final items = await wishlistRepository.fetchWishlist();
-
-      wishlistItems.assignAll(items);
+      wishlistItems.clear();
+      for (var item in items) {
+        wishlistItems[item['productId']] = WishlistModel(
+            wishlistId: item['wishlistId'], productId: item['productId']);
+      }
+    } catch (error) {
+      CustomSnackbar.show(title: 'Error'.tr, message: error.toString());
     } finally {
-      isLoading.value = false;
+      // isLoading.value = false;
     }
   }
 
@@ -60,17 +69,6 @@ class WishlistController extends GetxController {
       wishlistItems.clear();
     } finally {
       isLoading.value = false;
-    }
-  }
-
-  Future<void> removeItem(String wishlistId, String productId) async {
-    isLoading.value = true; // Set loading to true
-    try {
-      await wishlistRepository.removeItemFromWishlist(wishlistId, productId);
-      // wishlistItems.removeWhere((item) => item.productId == productId);
-      await fetchWishlist();
-    } finally {
-      isLoading.value = false; // Set loading to false
     }
   }
 }

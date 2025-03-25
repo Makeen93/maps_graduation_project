@@ -3,4 +3,5 @@ abstract class CartRepo {
   Future<List<Map<String, dynamic>>> fetchCart();
   Future<void> clearCart();
   Future<void> removeOneFromUserCart(String productId);
+  Future<void> updateQuantity(String productId, int newQuantity);
 }

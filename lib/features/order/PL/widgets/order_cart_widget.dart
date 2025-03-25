@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:maps_graduation_project/features/order/BL/controllers/order_controller.dart';
 
 import '../../DL/data/models/order_model.dart';
 
@@ -12,7 +11,6 @@ class OrderCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var orderController = Get.find<OrderController>();
     // Format the order date
     String formattedDate =
         DateFormat('yyyy-MM-dd – kk:mm').format(order.orderDate.toDate());

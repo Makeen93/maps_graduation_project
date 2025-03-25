@@ -7,17 +7,14 @@ import 'package:maps_graduation_project/features/order/DL/domain/repos/order_rep
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
 import 'package:maps_graduation_project/features/product/DL/data/models/product_model.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../../core/services/firebase_auth_service.dart';
 import '../../../../profile/BL/controllers/profile_controller.dart';
 
 class OrderRepoImp extends OrderRepo {
-  final FirebaseAuthService _firebaseAuthService;
   final FireStoreService _firestoreService;
   final CartController _cartcontroller;
   final ProductController _productcontroller;
   final ProfileController _profileController;
   OrderRepoImp(
-    this._firebaseAuthService,
     this._firestoreService,
     this._cartcontroller,
     this._productcontroller,
@@ -28,8 +25,7 @@ class OrderRepoImp extends OrderRepo {
   Future<List<OrderModel>> fetchOrders() async {
     final user = _profileController.userModel;
     final ordersSnapshot =
-        await _firebaseAuthService.fetchOrders(user.value!.userId);
-    print('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM${ordersSnapshot.length}');
+        await _firestoreService.fetchOrders(user.value!.userId);
     List<OrderModel> orders = ordersSnapshot
         .map((documentSnapshot) => OrderModel.fromJson(
             documentSnapshot.data() as Map<String, dynamic>))

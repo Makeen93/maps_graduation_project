@@ -22,29 +22,37 @@ import 'features/product/DL/data/repos/product_repo_impl.dart';
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => ProductRepoImp());
-    Get.lazyPut(() => MyAppMethods());
-    Get.lazyPut(() =>
-        SplashController(firebaseAuthService: Get.find<FirebaseAuthService>()));
-    Get.lazyPut(() => AuthController(Get.find<AuthRepositoryImp>()));
-    Get.lazyPut(
-      () => ProductController(productRepoImpl: Get.find()),
-    );
-    Get.lazyPut(() =>
-        RegisterController(authRepository: Get.find<AuthRepositoryImp>()));
     Get.lazyPut(() => FirebaseAuthService(), fenix: true);
     Get.lazyPut(() => FireStoreService(), fenix: true);
     Get.lazyPut(() => StorageService(), fenix: true);
-    Get.lazyPut(
-        () => ProfileRepoImpl(
-            firebaseAuthService: Get.find(), firestore: Get.find()),
-        fenix: true);
-    Get.lazyPut(() => ProfileController(profileRepoImpl: Get.find()));
-
+    Get.lazyPut(() => MyAppMethods());
+    Get.lazyPut(() => ProductRepoImp(), fenix: true);
+    Get.lazyPut(() =>
+        SplashController(firebaseAuthService: Get.find<FirebaseAuthService>()));
+    Get.lazyPut(() => AuthController(Get.find<AuthRepositoryImp>()));
+    Get.lazyPut(() =>
+        RegisterController(authRepository: Get.find<AuthRepositoryImp>()));
     Get.lazyPut(() => AuthRepositoryImp(
         auth: Get.find<FirebaseAuthService>(),
         firestoreService: Get.find<FireStoreService>(),
         storageService: Get.find<StorageService>()));
+    Get.lazyPut(() => ProductController(productRepoImpl: Get.find()),
+        fenix: true);
+    Get.lazyPut(
+        () => OrderRepoImp(
+            Get.find<FireStoreService>(),
+            Get.find<CartController>(),
+            Get.find<ProductController>(),
+            Get.find<ProfileController>()),
+        fenix: true);
+    Get.lazyPut(() => OrderController(Get.find()), fenix: true);
+    Get.lazyPut(
+        () => ProfileRepoImpl(
+            firebaseAuthService: Get.find(), firestore: Get.find()),
+        fenix: true);
+    Get.lazyPut(() => ProfileController(profileRepoImpl: Get.find()),
+        fenix: true);
+
     Get.lazyPut(() => WishlistRepoImp(Get.find(), Get.find()));
     Get.lazyPut(() => WishlistController(wishlistRepository: Get.find()));
     Get.lazyPut(
@@ -52,17 +60,5 @@ class AppBinding extends Bindings {
             Get.find<FireStoreService>(), Get.find<FirebaseAuthService>()),
         fenix: true);
     Get.lazyPut(() => CartController(cartRepository: Get.find()), fenix: true);
-
-    Get.lazyPut(
-        () => OrderRepoImp(
-            Get.find<FirebaseAuthService>(),
-            Get.find<FireStoreService>(),
-            Get.find<CartController>(),
-            Get.find<ProductController>(),
-            Get.find<ProfileController>()),
-        fenix: true);
-    Get.lazyPut(() => OrderController(Get.find<OrderRepoImp>()), fenix: true);
-    Get.lazyPut(() =>
-        SplashController(firebaseAuthService: Get.find<FirebaseAuthService>()));
   }
 }

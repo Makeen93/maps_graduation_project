@@ -102,32 +102,4 @@ class FirebaseAuthService {
   bool isLoggedIn() {
     return _auth.currentUser != null;
   }
-
-  // Future<User> signInWithGoogle() async {
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  //   final GoogleSignInAuthentication? googleAuth =
-  //       await googleUser?.authentication;
-
-  //   // Create a new credential
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth?.accessToken,
-  //     idToken: googleAuth?.idToken,
-  //   );
-
-  //   // Once signed in, return the UserCredential
-  //   return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
-  // }
-
-  Future<List<QueryDocumentSnapshot>> fetchOrders(String Id) async {
-    final user = await getCurrentUser();
-    if (user != null) {
-      final ordersSnapshot = await FirebaseFirestore.instance
-          .collection('orders')
-          .where('userId', isEqualTo: Id)
-          .get();
-      return ordersSnapshot.docs;
-    }
-    return [];
-  }
 }

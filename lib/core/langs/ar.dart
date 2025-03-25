@@ -6,6 +6,14 @@ var ar = {
   "clothes": "ملابس",
   "shoes": "أحذية",
   "books": "كتب",
+  'Wishlist': 'المفضلة',
+  'Orders': 'طلباتي',
+  'Shop Now': 'تسوق الآن',
+  'Looks like you didnot have any order': 'يبدو أنك لم تقم بأي عملية طلب بعد',
+  'Your orders is empty': 'طلباتك فارغة',
+  'Your wishlist is empty': 'المفضلة فارغة',
+  'Looks like you didnot have wishlist':
+      'يبدو انك لم تقم بإضافة أي منتج لقائمة المفضلة',
   "cosmetics": "مستحضرات تجميل",
   "Display name cannot be empty": "اسم العرض لا يمكن أن يكون فارغًا",
   "Display name must be between 3 and 20 characters":

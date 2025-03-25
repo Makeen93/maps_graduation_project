@@ -15,7 +15,9 @@ class FireStoreService implements DatabaseService {
       'userCart': FieldValue.arrayUnion(cartItems),
     });
   }
-  Future<void> updateQuantity(String uid, String productId, int newQuantity) async {
+
+  Future<void> updateQuantity(
+      String uid, String productId, int newQuantity) async {
     final userDoc = await usersDb.doc(uid).get();
     if (userDoc.exists) {
       final userData = userDoc.data();
@@ -34,6 +36,7 @@ class FireStoreService implements DatabaseService {
       }
     }
   }
+
   Future<void> clearUserCart(String uid) async {
     await usersDb.doc(uid).update({"userCart": []});
   }
@@ -69,6 +72,11 @@ class FireStoreService implements DatabaseService {
     }
   }
 
+  Future<List<QueryDocumentSnapshot>> fetchOrders(String id) async {
+    final ordersSnapshot = await orderDB.where('userId', isEqualTo: id).get();
+    return ordersSnapshot.docs;
+  }
+
   Future<List<ProductModel>> fetchProducts() async {
     try {
       List<ProductModel> productsList = [];
@@ -94,8 +102,8 @@ class FireStoreService implements DatabaseService {
     if (userDoc.exists) {
       final userData = userDoc.data();
 
-      if (userData != null) {
-        List<dynamic> wishList = userData['userWish'] ?? [];
+      if (userData != null && userData['userWish'] is List) {
+        List<dynamic> wishList = List.from(userData['userWish']);
         wishList.removeWhere((item) => item['productId'] == productId);
 
         await usersDb.doc(uid).update({'userWish': wishList});
@@ -119,8 +127,7 @@ class FireStoreService implements DatabaseService {
     return userDoc.data();
   }
 
-  Future<void> removeUserWishlistItem(
-      String uid, String wishlistId, String productId) async {
+  Future<void> removeUserWishlistItem(String uid, String productId) async {
     try {
       final userDoc = await usersDb.doc(uid).get();
       if (userDoc.exists) {
