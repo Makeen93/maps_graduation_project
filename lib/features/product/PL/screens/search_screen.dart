@@ -4,6 +4,7 @@ import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:maps_graduation_project/core/services/assets_manager.dart';
+import 'package:maps_graduation_project/core/widgets/loading_manger.dart';
 import 'package:maps_graduation_project/core/widgets/title_text.dart';
 import 'package:maps_graduation_project/features/product/BL/controllers/product_controller.dart';
 
@@ -15,9 +16,6 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var productController = Get.find<ProductController>();
     var passedCategory = Get.arguments ?? '';
-    productController.newProducts.value = passedCategory == null
-        ? productController.products.value
-        : productController.findByCategory(ctgName: passedCategory);
 
     return GestureDetector(
         onTap: () {
@@ -31,13 +29,16 @@ class SearchScreen extends StatelessWidget {
                 child: Image.asset(AssetsManager.shoppingCart),
               ),
             ),
-            body: productController.isLoading.value
-                ? const Center(child: CircularProgressIndicator())
-                : productController.newProducts.isEmpty
-                    ? Center(
-                        child: TitlesTextWidget(label: 'No Product Found'.tr))
-                    : Obx(() {
-                        return Padding(
+            body: Obx(() {
+              productController.newProducts.value = passedCategory == null
+                  ? productController.products.value
+                  : productController.findByCategory(ctgName: passedCategory);
+              return LoadingWidget(
+                  isLoading: productController.isLoading.value,
+                  child: productController.newProducts.isEmpty
+                      ? Center(
+                          child: TitlesTextWidget(label: 'No Product Found'.tr))
+                      : Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
@@ -106,8 +107,8 @@ class SearchScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                        );
-                      })));
+                        ));
+            })));
   }
 }
 

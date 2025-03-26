@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:maps_graduation_project/core/widgets/loading_manger.dart';
 import 'package:maps_graduation_project/features/order/BL/controllers/order_controller.dart';
 
 import '../../../../core/services/assets_manager.dart';
@@ -15,9 +16,10 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var orderController = Get.find<OrderController>();
-    return orderController.isLoading.value
-        ? const Center(child: CircularProgressIndicator())
-        : orderController.orders.isEmpty
+    return Obx(() {
+      return LoadingWidget(
+        isLoading: orderController.isLoading.value,
+        child: orderController.orders.isEmpty
             ? Scaffold(
                 body: EmptyBagWidget(
                   imagePath: AssetsManager.bagWish,
@@ -26,25 +28,24 @@ class OrderScreen extends StatelessWidget {
                   buttonText: 'Shop Now'.tr,
                 ),
               )
-            : Obx(() {
-                return Scaffold(
-                    appBar: AppBar(
-                      title: TitlesTextWidget(
-                          label:
-                              "${'Orders'.tr} (${orderController.orders.length})"),
-                      leading: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(AssetsManager.shoppingCart),
-                      ),
-                    ),
-                    body: ListView.builder(
-                      itemCount: orderController.orders.length,
-                      itemBuilder: (context, index) {
-                        return 
-                        OrderCardWidget(
-                            order: orderController.orders[index]);
-                      },
-                    ));
-              });
+            : Scaffold(
+                appBar: AppBar(
+                  title: TitlesTextWidget(
+                      label:
+                          "${'Orders'.tr} (${orderController.orders.length})"),
+                  leading: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(AssetsManager.shoppingCart),
+                  ),
+                ),
+                body: ListView.builder(
+                  itemCount: orderController.orders.length,
+                  itemBuilder: (context, index) {
+                    return OrderCardWidget(
+                        order: orderController.orders[index]);
+                  },
+                )),
+      );
+    });
   }
 }
